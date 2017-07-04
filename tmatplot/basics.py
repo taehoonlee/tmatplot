@@ -80,18 +80,38 @@ def multiBar(data,
     plt.show()
 
 
-def multiScatter(actual, predicted, title,
-                 savefile=None, figsize=(8, 3)):
-    import matplotlib.cm as cm
-    K = len(actual)
-    colors = cm.rainbow(np.linspace(0, 1, len(actual[0])))
-    f, axarr = plt.subplots(1, K, figsize=figsize)
+def scatter(x, y, xlabel=None, ylabel=None,
+            title=None, suptitle=None,
+            identityline=False, markersize=1,
+            colorbar=False, colorbar_labels=None,
+            savefile=None, grid=None, figsize=(8, 3)):
+    K = len(x)
+    colors = np.linspace(0, 1, len(x[0]))
+    if grid is None:
+        grid = (1, K)
+    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
+    if suptitle is not None:
+        plt.suptitle(suptitle)
+    if len(x) == 1:
+        axarr = [axarr]
     for k in range(K):
-        axarr[k].scatter(actual[k], predicted[k], color=colors, s=1)
-        axarr[k].plot([-5, 5], [-5, 5], 'k--', color='gray')
-        axarr[k].set_xlabel('Actual')
-        axarr[k].set_ylabel('Predicted')
-        axarr[k].set_title(title[k])
+        row = k / grid[1]
+        col = k % grid[1]
+        if identityline:
+            axarr[row, col].plot([-5, 5], [-5, 5], 'k--', color='gray')
+        sc = axarr[row, col].scatter(x[k], y[k], c=colors, cmap='rainbow', s=markersize)
+        if xlabel is not None:
+            axarr[row, col].set_xlabel(xlabel)
+        if ylabel is not None:
+            axarr[row, col].set_ylabel(ylabel)
+        if title is not None:
+            axarr[row, col].set_title(title[k])
+    if colorbar:
+        cbar = f.colorbar(sc)
+        if colorbar_labels is not None:
+            yticks = cbar.ax.get_yticks()
+            cbar.set_ticks(yticks)
+            cbar.set_ticklabels(colorbar_labels[::len(colors) // (len(yticks) - 1) - 1])
     if savefile is not None:
         plt.savefig(savefile)
     plt.show()
