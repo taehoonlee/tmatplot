@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 
 
 def wave(data, title,
-         ts=None, overlay=True,
+         ts=None, tsfmt=None,
+         overlay=True,
          xlabel=None, ylabel=None,
          pointidx=None, fillidx=None,
          savefile=None, figsize=(10, 2)):
@@ -44,8 +45,14 @@ def wave(data, title,
     if ts is not None:
         ticks = plt.gca().get_xticks()
         if ticks[-1] > T:
-            ticks = np.delete(ticks, -1)
-        plt.xticks(ticks, [ts[x.astype(int)][:7] for x in ticks])
+            ticks[-1] = T-1
+        if tsfmt is not None:
+            from datetime import datetime
+            tick_labels = [datetime.strptime(ts[x.astype(int)], '%Y-%m-%d %H:%M').strftime(tsfmt)
+                           for x in ticks]
+        else:
+            tick_labels = [ts[x.astype(int)][:7] for x in ticks]
+        plt.xticks(ticks, tick_labels)
     if savefile is not None:
         plt.savefig(savefile)
     if fillidx is not None:
