@@ -89,31 +89,43 @@ def scatter(x, y, xlabel=None, ylabel=None,
     colors = np.linspace(0, 1, len(x[0]))
     if grid is None:
         grid = (1, K)
+
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
+
+    if isinstance(axarr, np.ndarray):
+        if axarr.ndim == 1:
+            axarr = np.array([axarr])
+    else:
+        axarr = np.array([[axarr]])
+
     if suptitle is not None:
         plt.suptitle(suptitle)
-    if len(x) == 1:
-        axarr = [axarr]
+
     for k in range(K):
         row = k / grid[1]
         col = k % grid[1]
         if identityline:
             axarr[row, col].plot([-5, 5], [-5, 5], 'k--', color='gray')
-        sc = axarr[row, col].scatter(x[k], y[k], c=colors, cmap='rainbow', s=markersize)
+        sc = axarr[row, col].scatter(x[k], y[k], c=colors,
+                                     cmap='rainbow', s=markersize)
         if xlabel is not None:
             axarr[row, col].set_xlabel(xlabel)
         if ylabel is not None:
             axarr[row, col].set_ylabel(ylabel)
         if title is not None:
             axarr[row, col].set_title(title[k])
+
     if colorbar:
         cbar = f.colorbar(sc)
         if colorbar_labels is not None:
             yticks = cbar.ax.get_yticks()
+            ytlabels = colorbar_labels[::len(colors) // (len(yticks) - 1) - 1]
             cbar.set_ticks(yticks)
-            cbar.set_ticklabels(colorbar_labels[::len(colors) // (len(yticks) - 1) - 1])
+            cbar.set_ticklabels(ytlabels)
+
     if savefile is not None:
         plt.savefig(savefile)
+
     plt.show()
 
 

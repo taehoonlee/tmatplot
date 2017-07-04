@@ -43,15 +43,16 @@ def wave(data, title,
     if ylabel is not None:
         plt.ylabel(ylabel)
     if ts is not None:
-        ticks = plt.gca().get_xticks()
+        ticks = [x.astype(int) for x in plt.gca().get_xticks()]
         if ticks[-1] > T:
             ticks[-1] = T-1
         if tsfmt is not None:
             from datetime import datetime
-            tick_labels = [datetime.strptime(ts[x.astype(int)], '%Y-%m-%d %H:%M').strftime(tsfmt)
+            fmt = '%Y-%m-%d %H:%M'
+            tick_labels = [datetime.strptime(ts[x], fmt).strftime(tsfmt)
                            for x in ticks]
         else:
-            tick_labels = [ts[x.astype(int)][:7] for x in ticks]
+            tick_labels = [ts[x][:7] for x in ticks]
         plt.xticks(ticks, tick_labels)
     if savefile is not None:
         plt.savefig(savefile)
