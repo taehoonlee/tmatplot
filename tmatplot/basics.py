@@ -129,24 +129,58 @@ def scatter(x, y, xlabel=None, ylabel=None,
     plt.show()
 
 
-def multiHist(key, actual, predicted, bins,
-              xlabel, ylabel,
-              savefile=None, figsize=(12, 3)):
-    f, axarr = plt.subplots(1, len(key), figsize=figsize, sharey=True)
-    for (i, k) in enumerate(key):
-        axarr[i].hist(actual[k], bins=bins,
-                      label='Actual', alpha=0.2, color='red')
-        axarr[i].hist(predicted[k], bins=bins,
-                      label='Predicted', alpha=0.5)
-        axarr[i].set_title(k)
+def hist(data, bins=None,
+         labels=None, colors=None,
+         xlabel=None, ylabel=None,
+         title=None, suptitle=None,
+         savefile=None, grid=None, figsize=(12, 3)):
+    K = len(data)
+    if grid is None:
+        grid = (1, K)
+
+    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize,
+                            sharey=True)
+
+    if isinstance(axarr, np.ndarray):
+        if axarr.ndim == 1:
+            axarr = np.array([axarr])
+    else:
+        axarr = np.array([[axarr]])
+
+    if suptitle is not None:
+        plt.suptitle(suptitle)
+
+    for k in range(K):
+        row = k / grid[1]
+        col = k % grid[1]
+        if isinstance(data[k], list):
+            for i in range(len(data[k])):
+                kwargs = {}
+                if bins is not None:
+                    kwargs['bins'] = bins
+                if labels is not None:
+                    kwargs['label'] = labels[i]
+                if colors is not None:
+                    try:
+                        kwargs['alpha'] = 0.2
+                        kwargs['color'] = colors[i]
+                    except:
+                        kwargs['alpha'] = 0.5
+                axarr[row, col].hist(data[k][i], **kwargs)
+        else:
+            axarr[row, col].hist(data[k])
         if xlabel is not None:
-            axarr[i].set_xlabel(xlabel)
-        if i == 0:
-            axarr[i].legend()
+            axarr[row, col].set_xlabel(xlabel)
+        if k == 0:
+            axarr[row, col].legend()
             if ylabel is not None:
-                axarr[i].set_ylabel(ylabel)
+                axarr[row, col].set_ylabel(ylabel)
+        if title is not None:
+            axarr[row, col].set_title(title[k])
+
     if savefile is not None:
         plt.savefig(savefile)
+
     plt.show()
 
 
