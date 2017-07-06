@@ -45,7 +45,7 @@ def wave(data, title,
     if ts is not None:
         ticks = [x.astype(int) for x in plt.gca().get_xticks()]
         if ticks[-1] > T:
-            ticks[-1] = T-1
+            ticks = np.delete(ticks, -1)
         if tsfmt is not None:
             from datetime import datetime
             fmt = '%Y-%m-%d %H:%M'
@@ -83,7 +83,7 @@ def wave(data, title,
     plt.close()
 
 
-def abnormal(data, title, ts, events, threshold, cont=12):
+def abnormal(data, title, ts, events, threshold, cont=12, tsfmt=None):
     from .utils import getRanges
     canidx = data > threshold
     if cont > 0:
@@ -92,7 +92,7 @@ def abnormal(data, title, ts, events, threshold, cont=12):
                 canidx[i:j+1] = False
             else:
                 print("%s ~ %s" % (ts[i], ts[j]))
-    wave(data=data, title=title, ts=ts,
+    wave(data=data, title=title, ts=ts, tsfmt=tsfmt,
          ylabel='Degree of Abnormality',
          figsize=(10, 3),
          pointidx=[np.where(ts == e)[0][0] for e in events],
