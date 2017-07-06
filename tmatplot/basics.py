@@ -23,18 +23,34 @@ def histAll(data, title, grid=(3, 5),
 
 
 def corr(data, ylabel=None,
-         savefile=None):
-    plt.figure()
+         title=None, colorbar=True,
+         savefile=None, figsize=(8, 6)):
+    plt.figure(figsize=figsize)
     plt.imshow(np.corrcoef(data[np.sum(np.isnan(data), axis=1) == 0].T),
                interpolation='nearest')
+
+    if title is not None:
+        plt.title(title)
+
     plt.setp(plt.gca().get_xticklabels(), visible=False)
+
     if ylabel is None:
         plt.setp(plt.gca().get_yticklabels(), visible=False)
     else:
-        plt.gca().set_yticklabels(ylabel)
-    plt.colorbar()
+        yticks = [x.astype(int) for x in plt.gca().get_yticks()]
+        if yticks[0] < 0:
+            yticks = np.delete(yticks, 0)
+        if yticks[-1] > len(ylabel):
+            yticks = np.delete(yticks, -1)
+        plt.gca().set_yticks(yticks)
+        plt.gca().set_yticklabels(ylabel[yticks])
+
+    if colorbar:
+        plt.colorbar()
+
     if savefile is not None:
         plt.savefig(savefile)
+
     plt.show()
     plt.close()
 
