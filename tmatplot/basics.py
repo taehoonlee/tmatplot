@@ -2,22 +2,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def histAll(data, title, grid=(3, 5),
+def histAll(data, title=None, grid=None,
             savefile=None, figsize=(10, 4)):
-    f, ax = plt.subplots(grid[0], grid[1], figsize=figsize)
-    for i in range(data.shape[1]):
-        row = i % grid[0]
-        col = i / grid[0]
-        ax[row, col].hist(data[~np.isnan(data[:, i]), i], 100,
-                          facecolor='#c5c5c5', edgecolor='None')
-        ax[row, col].set_title(title[i])
-    for i in ax:
+    if grid is None:
+        grid = (((data.shape[1] - 1) // 5) + 1, 5)
+
+    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
+
+    for k in range(data.shape[1]):
+        row = k / grid[1]
+        col = k % grid[1]
+        axarr[row, col].hist(data[~np.isnan(data[:, k]), k], 100,
+                             facecolor='#c5c5c5', edgecolor='None')
+        if title is not None:
+            axarr[row, col].set_title(title[k])
+
+    for i in axarr:
         for j in i:
             plt.setp(j.get_xticklabels(), visible=False)
             plt.setp(j.get_yticklabels(), visible=False)
     plt.tight_layout()
+
     if savefile is not None:
         plt.savefig(savefile)
+
     plt.show()
     plt.close()
 
@@ -40,7 +48,7 @@ def corr(data, ylabel=None,
         yticks = [x.astype(int) for x in plt.gca().get_yticks()]
         if yticks[0] < 0:
             yticks = np.delete(yticks, 0)
-        if yticks[-1] > len(ylabel):
+        if yticks[-1] >= len(ylabel):
             yticks = np.delete(yticks, -1)
         plt.gca().set_yticks(yticks)
         plt.gca().set_yticklabels(ylabel[yticks])
@@ -76,11 +84,14 @@ def dualBar(data1, data2,
 
     if title is not None:
         plt.title(title)
+
     if xlabel is not None:
         plt.xticks(width*np.arange(K), xlabel, rotation='vertical')
     plt.xlim([-width, width*K])
+
     if savefile is not None:
         plt.savefig(savefile)
+
     plt.show()
 
 
