@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def histAll(data, title=None, grid=None,
-            savefile=None, figsize=(10, 4)):
+def histAll(data, title=None, bins=100, color='#c5c5c5',
+            savefile=None, grid=None, figsize=(10, 4)):
     if grid is None:
         grid = (((data.shape[1] - 1) // 5) + 1, 5)
 
@@ -12,8 +12,8 @@ def histAll(data, title=None, grid=None,
     for k in range(data.shape[1]):
         row = k / grid[1]
         col = k % grid[1]
-        axarr[row, col].hist(data[~np.isnan(data[:, k]), k], 100,
-                             facecolor='#c5c5c5', edgecolor='None')
+        axarr[row, col].hist(data[~np.isnan(data[:, k]), k], bins,
+                             facecolor=color, edgecolor='None')
         if title is not None:
             axarr[row, col].set_title(title[k])
 
@@ -64,6 +64,7 @@ def corr(data, ylabel=None,
 
 
 def dualBar(data1, data2,
+            color1='#999999',
             title=None, xlabel=None,
             ylabel1=None, ylabel2=None, width=3,
             savefile=None, figsize=(8, 3)):
@@ -73,7 +74,7 @@ def dualBar(data1, data2,
 
     K = data1.shape[0]
     ax1.bar(width*np.arange(K)-width*0.2, np.mean(data1, axis=1), width*0.35,
-            yerr=np.std(data1, axis=1), color='#999999')
+            yerr=np.std(data1, axis=1), color=color1)
     ax2.bar(width*np.arange(K)+width*0.2, np.mean(data2, axis=1), width*0.35,
             yerr=np.std(data2, axis=1))
 
@@ -110,7 +111,7 @@ def multiBar(data,
 def scatter(x, y, xlabel=None, ylabel=None,
             title=None, suptitle=None,
             identityline=False, markersize=1,
-            colorbar=False, colorbar_labels=None,
+            cmap='rainbow', colorbar=False, colorbar_labels=None,
             savefile=None, grid=None, figsize=(8, 3)):
     K = len(x)
     colors = np.linspace(0, 1, len(x[0]))
@@ -134,7 +135,7 @@ def scatter(x, y, xlabel=None, ylabel=None,
         if identityline:
             axarr[row, col].plot([-5, 5], [-5, 5], 'k--', color='gray')
         sc = axarr[row, col].scatter(x[k], y[k], c=colors,
-                                     cmap='rainbow', s=markersize)
+                                     cmap=cmap, s=markersize)
         if xlabel is not None:
             axarr[row, col].set_xlabel(xlabel)
         if ylabel is not None:

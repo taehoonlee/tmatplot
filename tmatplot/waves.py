@@ -6,7 +6,8 @@ def wave(data, title,
          ts=None, tsfmt=None,
          overlay=True,
          xlabel=None, ylabel=None,
-         pointidx=None, fillidx=None,
+         pointidx=None,
+         fillidx=None, fillcolor='red',
          savefile=None, figsize=(10, 2)):
     if len(data.shape) > 1:
         T, F = data.shape
@@ -62,7 +63,7 @@ def wave(data, title,
             if overlay:
                 plt.fill_between(range(T), ylim[0], ylim[1],
                                  where=fillidx, edgecolor='None',
-                                 facecolor='red', alpha=0.2,
+                                 facecolor=fillcolor, alpha=0.2,
                                  interpolate=False)
                 plt.gca().set_ylim(ylim)
             else:
@@ -70,13 +71,13 @@ def wave(data, title,
                     ylim = ax[i].get_ylim()
                     ax[i].fill_between(range(T), ylim[0], ylim[1],
                                        where=fillidx, edgecolor='None',
-                                       facecolor='red', alpha=0.2,
+                                       facecolor=fillcolor, alpha=0.2,
                                        interpolate=False)
                     ax[i].set_ylim(ylim)
         else:
             plt.fill_between(range(T), ylim[0], ylim[1],
                              where=fillidx, edgecolor='None',
-                             facecolor='red', alpha=0.2,
+                             facecolor=fillcolor, alpha=0.2,
                              interpolate=False)
             plt.gca().set_ylim(ylim)
     plt.show()
