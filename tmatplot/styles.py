@@ -24,3 +24,4 @@ mpl.rcParams['grid.linestyle'] = ':'
 mpl.rcParams['grid.linewidth'] = 0.5
 
 mpl.rcParams['image.cmap'] = 'rainbow'
+mpl.rcParams['image.interpolation'] = 'nearest'

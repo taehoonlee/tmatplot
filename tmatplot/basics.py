@@ -34,8 +34,7 @@ def corr(data, ylabel=None,
          title=None, colorbar=True,
          savefile=None, figsize=(8, 6)):
     plt.figure(figsize=figsize)
-    plt.imshow(np.corrcoef(data[np.sum(np.isnan(data), axis=1) == 0].T),
-               interpolation='nearest')
+    plt.imshow(np.corrcoef(data[np.sum(np.isnan(data), axis=1) == 0].T))
 
     if title is not None:
         plt.title(title)
