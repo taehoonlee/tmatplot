@@ -1,3 +1,5 @@
+from __future__ import division
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -10,7 +12,7 @@ def histAll(data, title=None, bins=100, color='#c5c5c5',
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
 
     for k in range(data.shape[1]):
-        row = k / grid[1]
+        row = k // grid[1]
         col = k % grid[1]
         axarr[row, col].hist(data[~np.isnan(data[:, k]), k], bins,
                              facecolor=color, edgecolor='None')
@@ -129,7 +131,7 @@ def scatter(x, y, xlabel=None, ylabel=None,
         plt.suptitle(suptitle)
 
     for k in range(K):
-        row = k / grid[1]
+        row = k // grid[1]
         col = k % grid[1]
         if identityline:
             axarr[row, col].plot([-5, 5], [-5, 5], 'k--', color='gray')
@@ -178,7 +180,7 @@ def hist(data, bins=None,
         plt.suptitle(suptitle)
 
     for k in range(K):
-        row = k / grid[1]
+        row = k // grid[1]
         col = k % grid[1]
         if isinstance(data[k], list):
             for i in range(len(data[k])):
