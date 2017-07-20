@@ -34,9 +34,19 @@ def histAll(data, title=None, bins=100, color='#c5c5c5',
 
 def corr(data, ylabel=None,
          title=None, colorbar=True,
+         window=None, sample=1000,
          savefile=None, figsize=(8, 6)):
     plt.figure(figsize=figsize)
-    plt.imshow(np.corrcoef(data[np.sum(np.isnan(data), axis=1) == 0].T))
+    if window is not None:
+        corrcoef = []
+        for s in range(sample):
+            i = np.random.randint(0, data.shape[0]-window)
+            c = np.corrcoef(data[i:(i+window)].T)
+            corrcoef.append(c)
+        results = np.nanmean(np.array(corrcoef), axis=0)
+    else:
+        results = np.corrcoef(data[np.sum(np.isnan(data), axis=1) == 0].T)
+    plt.imshow(results)
 
     if title is not None:
         plt.title(title)
@@ -62,6 +72,8 @@ def corr(data, ylabel=None,
 
     plt.show()
     plt.close()
+
+    return results
 
 
 def dualBar(data1, data2,
