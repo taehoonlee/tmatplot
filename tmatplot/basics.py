@@ -6,12 +6,19 @@ import matplotlib.pyplot as plt
 
 def histAll(data, title=None, bins=100, color='#c5c5c5',
             savefile=None, grid=None, figsize=(10, 4)):
+    K = data.shape[1]
     if grid is None:
-        grid = (((data.shape[1] - 1) // 5) + 1, 5)
+        grid = (((K - 1) // 5) + 1, 5)
 
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
 
-    for k in range(data.shape[1]):
+    if isinstance(axarr, np.ndarray):
+        if axarr.ndim == 1:
+            axarr = np.array([axarr])
+    else:
+        axarr = np.array([[axarr]])
+
+    for k in range(K):
         row = k // grid[1]
         col = k % grid[1]
         axarr[row, col].hist(data[~np.isnan(data[:, k]), k], bins,
@@ -110,14 +117,22 @@ def dualBar(data1, data2,
 
 
 def multiBar(data,
-             savefile=None, figsize=(8, 2)):
-    f, axarr = plt.subplots(1, len(data), figsize=figsize)
-    if len(data) == 1:
-        axarr = [axarr]
+             savefile=None, grid=None,
+             figsize=(8, 2)):
+    if grid is None:
+        grid = (1, len(data))
+
+    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
+
+    if not isinstance(axarr, np.ndarray):
+        axarr = np.array([axarr])
+
     for (k, d) in enumerate(data):
         axarr[k].bar(range(len(d)), d)
+
     if savefile is not None:
         plt.savefig(savefile)
+
     plt.show()
 
 
