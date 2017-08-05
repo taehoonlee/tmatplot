@@ -4,6 +4,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def makeArray(axarr, ndim=2):
+    if isinstance(axarr, np.ndarray):
+        if ndim == 2:
+            if axarr.ndim == 1:
+                return np.array([axarr])
+            else:
+                return axarr
+        else:
+            return axarr
+    else:
+        if ndim == 2:
+            return np.array([[axarr]])
+        else:
+            return np.array([axarr])
+
+
 def histAll(data, title=None, bins=100, color='#c5c5c5',
             savefile=None, grid=None, figsize=(10, 4)):
     K = data.shape[1]
@@ -11,12 +27,7 @@ def histAll(data, title=None, bins=100, color='#c5c5c5',
         grid = (((K - 1) // 5) + 1, 5)
 
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
-
-    if isinstance(axarr, np.ndarray):
-        if axarr.ndim == 1:
-            axarr = np.array([axarr])
-    else:
-        axarr = np.array([[axarr]])
+    axarr = makeArray(axarr)
 
     for k in range(K):
         row = k // grid[1]
@@ -123,9 +134,7 @@ def multiBar(data,
         grid = (1, len(data))
 
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
-
-    if not isinstance(axarr, np.ndarray):
-        axarr = np.array([axarr])
+    axarr = makeArray(axarr, 1)
 
     for (k, d) in enumerate(data):
         axarr[k].bar(range(len(d)), d)
@@ -147,12 +156,7 @@ def scatter(x, y, xlabel=None, ylabel=None,
         grid = (1, K)
 
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
-
-    if isinstance(axarr, np.ndarray):
-        if axarr.ndim == 1:
-            axarr = np.array([axarr])
-    else:
-        axarr = np.array([[axarr]])
+    axarr = makeArray(axarr)
 
     if suptitle is not None:
         plt.suptitle(suptitle)
@@ -196,12 +200,7 @@ def hist(data, bins=None,
 
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize,
                             sharey=True)
-
-    if isinstance(axarr, np.ndarray):
-        if axarr.ndim == 1:
-            axarr = np.array([axarr])
-    else:
-        axarr = np.array([[axarr]])
+    axarr = makeArray(axarr)
 
     if suptitle is not None:
         plt.suptitle(suptitle)
@@ -244,6 +243,7 @@ def multiPredRange(key, actual, predicted,
                    xlabel, ylabel,
                    savefile=None, figsize=(12, 3)):
     f, axarr = plt.subplots(1, len(key), figsize=figsize, sharey=True)
+    axarr = makeArray(axarr, 1)
     for (i, k) in enumerate(key):
         idx = np.argsort(actual[k])
         axarr[i].plot(actual[k][idx], label='Actual',
