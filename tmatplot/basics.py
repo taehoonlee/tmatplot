@@ -20,12 +20,19 @@ def makeArray(axarr, ndim=2):
             return np.array([axarr])
 
 
-def histAll(data, title=None, bins=100, color='#c5c5c5',
-            savefile=None, grid=None, figsize=(10, 4)):
-    K = data.shape[1]
-    if grid is None:
-        grid = (((K - 1) // 5) + 1, 5)
+def makeGrid(grid, objects):
+    if grid[0] is None:
+        return (((objects - 1) // grid[1]) + 1, grid[1])
+    elif grid[1] is None:
+        return (grid[0], ((objects - 1) // grid[0]) + 1)
+    else:
+        return (((objects - 1) // 5) + 1, 5)  # default is (x, 5)
 
+
+def histAll(data, title=None, bins=100, color='#c5c5c5',
+            savefile=None, grid=(None, 5), figsize=(10, 4)):
+    K = data.shape[1]
+    grid = makeGrid(grid, K)
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
     axarr = makeArray(axarr)
 
@@ -127,12 +134,8 @@ def dualBar(data1, data2,
     plt.show()
 
 
-def multiBar(data,
-             savefile=None, grid=None,
-             figsize=(8, 2)):
-    if grid is None:
-        grid = (1, len(data))
-
+def multiBar(data, savefile=None, grid=(1, None), figsize=(8, 2)):
+    grid = makeGrid(grid, len(data))
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
     axarr = makeArray(axarr, 1)
 
@@ -149,12 +152,10 @@ def scatter(x, y, xlabel=None, ylabel=None,
             title=None, suptitle=None,
             identityline=False, markersize=1,
             cmap='rainbow', colorbar=False, colorbar_labels=None,
-            savefile=None, grid=None, figsize=(8, 3)):
+            savefile=None, grid=(1, None), figsize=(8, 3)):
     K = len(x)
     colors = np.linspace(0, 1, len(x[0]))
-    if grid is None:
-        grid = (1, K)
-
+    grid = makeGrid(grid, K)
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
     axarr = makeArray(axarr)
 
@@ -193,13 +194,10 @@ def hist(data, bins=None,
          labels=None, colors=None,
          xlabel=None, ylabel=None,
          title=None, suptitle=None,
-         savefile=None, grid=None, figsize=(12, 3)):
+         savefile=None, grid=(1, None), figsize=(12, 3)):
     K = len(data)
-    if grid is None:
-        grid = (1, K)
-
-    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize,
-                            sharey=True)
+    grid = makeGrid(grid, K)
+    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize, sharey=True)
     axarr = makeArray(axarr)
 
     if suptitle is not None:
@@ -241,8 +239,9 @@ def hist(data, bins=None,
 
 def multiPredRange(key, actual, predicted,
                    xlabel, ylabel,
-                   savefile=None, figsize=(12, 3)):
-    f, axarr = plt.subplots(1, len(key), figsize=figsize, sharey=True)
+                   savefile=None, grid=(1, None), figsize=(12, 3)):
+    grid = makeGrid(grid, len(key))
+    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize, sharey=True)
     axarr = makeArray(axarr, 1)
     for (i, k) in enumerate(key):
         idx = np.argsort(actual[k])
