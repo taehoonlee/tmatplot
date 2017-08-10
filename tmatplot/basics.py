@@ -1,32 +1,11 @@
+from __future__ import absolute_import
 from __future__ import division
+
+from .utils import makeGrid
+from .utils import makeArray
 
 import numpy as np
 import matplotlib.pyplot as plt
-
-
-def makeArray(axarr, ndim=2):
-    if isinstance(axarr, np.ndarray):
-        if ndim == 2:
-            if axarr.ndim == 1:
-                return np.array([axarr])
-            else:
-                return axarr
-        else:
-            return axarr
-    else:
-        if ndim == 2:
-            return np.array([[axarr]])
-        else:
-            return np.array([axarr])
-
-
-def makeGrid(grid, objects):
-    if grid[0] is None:
-        return (((objects - 1) // grid[1]) + 1, grid[1])
-    elif grid[1] is None:
-        return (grid[0], ((objects - 1) // grid[0]) + 1)
-    else:
-        return (((objects - 1) // 5) + 1, 5)  # default is (x, 5)
 
 
 def histAll(data, title=None, bins=100, color='#c5c5c5',

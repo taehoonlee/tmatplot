@@ -1,3 +1,7 @@
+from __future__ import absolute_import
+
+from .utils import getRanges
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -85,7 +89,6 @@ def wave(data, title,
 
 
 def abnormal(data, title, ts, events, threshold, cont=12, tsfmt=None):
-    from .utils import getRanges
     canidx = data > threshold
     if cont > 0:
         for (i, j) in getRanges(np.where(canidx)[0]):
