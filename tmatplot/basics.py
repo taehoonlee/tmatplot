@@ -10,7 +10,8 @@ import matplotlib.pyplot as plt
 
 
 @closeWithSave
-def histAll(data, title=None, bins=100, color='#c5c5c5',
+def histAll(data, title=None, bins=None,
+            color='#c5c5c5', edgecolor='None',
             xlabel=None, ylabel=None,
             savefile=None, grid=(None, 5), figsize=(10, 4)):
     K = data.shape[1]
@@ -21,8 +22,21 @@ def histAll(data, title=None, bins=100, color='#c5c5c5',
     for k in range(K):
         row = k // grid[1]
         col = k % grid[1]
-        axarr[row, col].hist(data[~np.isnan(data[:, k]), k], bins,
-                             facecolor=color, edgecolor='None')
+
+        kwargs = {}
+        if bins is not None:
+            kwargs['bins'] = bins
+
+        if color is not None:
+            if isinstance(color, list):
+                kwargs['color'] = color[k]
+            else:
+                kwargs['color'] = color
+
+        if edgecolor is not None:
+            kwargs['edgecolor'] = edgecolor
+
+        axarr[row, col].hist(data[~np.isnan(data[:, k]), k], **kwargs)
 
         if title is not None:
             axarr[row, col].set_title(title[k])
