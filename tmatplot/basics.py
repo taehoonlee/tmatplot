@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 
 @closeWithSave
 def histAll(data, title=None, bins=100, color='#c5c5c5',
+            xlabel=None, ylabel=None,
             savefile=None, grid=(None, 5), figsize=(10, 4)):
     K = data.shape[1]
     grid = makeGrid(grid, K)
@@ -22,18 +23,21 @@ def histAll(data, title=None, bins=100, color='#c5c5c5',
         col = k % grid[1]
         axarr[row, col].hist(data[~np.isnan(data[:, k]), k], bins,
                              facecolor=color, edgecolor='None')
+
         if title is not None:
             axarr[row, col].set_title(title[k])
 
-    for i in axarr:
-        for j in i:
-            plt.setp(j.get_xticklabels(), visible=False)
-            plt.setp(j.get_yticklabels(), visible=False)
+        if xlabel is None:
+            plt.setp(axarr[row, col].get_xticklabels(), visible=False)
+
+        if ylabel is None:
+            plt.setp(axarr[row, col].get_yticklabels(), visible=False)
+
     plt.tight_layout()
 
 
 @closeWithSave
-def corr(data, ylabel=None,
+def corr(data, xlabel=None, ylabel=None,
          title=None, colorbar=True,
          window=None, sample=1000,
          savefile=None, figsize=(8, 6)):
@@ -52,7 +56,8 @@ def corr(data, ylabel=None,
     if title is not None:
         plt.title(title)
 
-    plt.setp(plt.gca().get_xticklabels(), visible=False)
+    if xlabel is None:
+        plt.setp(plt.gca().get_xticklabels(), visible=False)
 
     if ylabel is None:
         plt.setp(plt.gca().get_yticklabels(), visible=False)
