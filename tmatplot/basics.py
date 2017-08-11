@@ -3,11 +3,13 @@ from __future__ import division
 
 from .utils import makeGrid
 from .utils import makeArray
+from .utils import closeWithSave
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 
+@closeWithSave
 def histAll(data, title=None, bins=100, color='#c5c5c5',
             savefile=None, grid=(None, 5), figsize=(10, 4)):
     K = data.shape[1]
@@ -29,13 +31,8 @@ def histAll(data, title=None, bins=100, color='#c5c5c5',
             plt.setp(j.get_yticklabels(), visible=False)
     plt.tight_layout()
 
-    if savefile is not None:
-        plt.savefig(savefile)
 
-    plt.show()
-    plt.close()
-
-
+@closeWithSave
 def corr(data, ylabel=None,
          title=None, colorbar=True,
          window=None, sample=1000,
@@ -71,15 +68,10 @@ def corr(data, ylabel=None,
     if colorbar:
         plt.colorbar()
 
-    if savefile is not None:
-        plt.savefig(savefile)
-
-    plt.show()
-    plt.close()
-
     return results
 
 
+@closeWithSave
 def dualBar(data1, data2,
             color1='#999999',
             title=None, xlabel=None,
@@ -107,12 +99,8 @@ def dualBar(data1, data2,
         plt.xticks(width*np.arange(K), xlabel, rotation='vertical')
     plt.xlim([-width, width*K])
 
-    if savefile is not None:
-        plt.savefig(savefile)
 
-    plt.show()
-
-
+@closeWithSave
 def multiBar(data, savefile=None, grid=(1, None), figsize=(8, 2)):
     grid = makeGrid(grid, len(data))
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
@@ -121,12 +109,8 @@ def multiBar(data, savefile=None, grid=(1, None), figsize=(8, 2)):
     for (k, d) in enumerate(data):
         axarr[k].bar(range(len(d)), d)
 
-    if savefile is not None:
-        plt.savefig(savefile)
 
-    plt.show()
-
-
+@closeWithSave
 def scatter(x, y, xlabel=None, ylabel=None,
             title=None, suptitle=None,
             identityline=False, markersize=1,
@@ -163,12 +147,8 @@ def scatter(x, y, xlabel=None, ylabel=None,
             cbar.set_ticks(yticks)
             cbar.set_ticklabels(ytlabels)
 
-    if savefile is not None:
-        plt.savefig(savefile)
 
-    plt.show()
-
-
+@closeWithSave
 def hist(data, bins=None,
          labels=None, colors=None,
          xlabel=None, ylabel=None,
@@ -210,12 +190,8 @@ def hist(data, bins=None,
         if title is not None:
             axarr[row, col].set_title(title[k])
 
-    if savefile is not None:
-        plt.savefig(savefile)
 
-    plt.show()
-
-
+@closeWithSave
 def multiPredRange(key, actual, predicted,
                    xlabel, ylabel,
                    savefile=None, grid=(1, None), figsize=(12, 3)):
@@ -239,6 +215,3 @@ def multiPredRange(key, actual, predicted,
             axarr[i].legend()
             if ylabel is not None:
                 axarr[i].set_ylabel(ylabel)
-    if savefile is not None:
-        plt.savefig(savefile)
-    plt.show()
