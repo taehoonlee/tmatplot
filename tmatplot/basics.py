@@ -20,8 +20,7 @@ def histAll(data, title=None, bins=None,
     axarr = makeArray(axarr)
 
     for k in range(K):
-        row = k // grid[1]
-        col = k % grid[1]
+        ax = axarr[k // grid[1], k % grid[1]]
 
         kwargs = {}
         if bins is not None:
@@ -36,16 +35,16 @@ def histAll(data, title=None, bins=None,
         if edgecolor is not None:
             kwargs['edgecolor'] = edgecolor
 
-        axarr[row, col].hist(data[~np.isnan(data[:, k]), k], **kwargs)
+        ax.hist(data[~np.isnan(data[:, k]), k], **kwargs)
 
         if title is not None:
-            axarr[row, col].set_title(title[k])
+            ax.set_title(title[k])
 
         if xlabel is None:
-            plt.setp(axarr[row, col].get_xticklabels(), visible=False)
+            plt.setp(ax.get_xticklabels(), visible=False)
 
         if ylabel is None:
-            plt.setp(axarr[row, col].get_yticklabels(), visible=False)
+            plt.setp(ax.get_yticklabels(), visible=False)
 
     plt.tight_layout()
 
@@ -126,7 +125,8 @@ def multiBar(data, savefile=None, grid=(1, None), figsize=(8, 2)):
     axarr = makeArray(axarr, 1)
 
     for (k, d) in enumerate(data):
-        axarr[k].bar(range(len(d)), d)
+        ax = axarr[k]
+        ax.bar(range(len(d)), d)
 
 
 @closeWithSave
@@ -145,18 +145,17 @@ def scatter(x, y, xlabel=None, ylabel=None,
         plt.suptitle(suptitle)
 
     for k in range(K):
-        row = k // grid[1]
-        col = k % grid[1]
+        ax = axarr[k // grid[1], k % grid[1]]
         if identityline:
-            axarr[row, col].plot([-5, 5], [-5, 5], 'k--', color='gray')
-        sc = axarr[row, col].scatter(x[k], y[k], c=colors,
-                                     cmap=cmap, s=markersize)
+            ax.plot([-5, 5], [-5, 5], 'k--', color='gray')
+        sc = ax.scatter(x[k], y[k], c=colors,
+                        cmap=cmap, s=markersize)
         if xlabel is not None:
-            axarr[row, col].set_xlabel(xlabel)
+            ax.set_xlabel(xlabel)
         if ylabel is not None:
-            axarr[row, col].set_ylabel(ylabel)
+            ax.set_ylabel(ylabel)
         if title is not None:
-            axarr[row, col].set_title(title[k])
+            ax.set_title(title[k])
 
     if colorbar:
         cbar = f.colorbar(sc)
@@ -182,8 +181,7 @@ def hist(data, bins=None,
         plt.suptitle(suptitle)
 
     for k in range(K):
-        row = k // grid[1]
-        col = k % grid[1]
+        ax = axarr[k // grid[1], k % grid[1]]
         if isinstance(data[k], list):
             for i in range(len(data[k])):
                 kwargs = {}
@@ -197,17 +195,17 @@ def hist(data, bins=None,
                         kwargs['color'] = colors[i]
                     except:
                         kwargs['alpha'] = 0.5
-                axarr[row, col].hist(data[k][i], **kwargs)
+                ax.hist(data[k][i], **kwargs)
         else:
-            axarr[row, col].hist(data[k])
+            ax.hist(data[k])
         if xlabel is not None:
-            axarr[row, col].set_xlabel(xlabel)
+            ax.set_xlabel(xlabel)
         if k == 0:
-            axarr[row, col].legend()
+            ax.legend()
             if ylabel is not None:
-                axarr[row, col].set_ylabel(ylabel)
+                ax.set_ylabel(ylabel)
         if title is not None:
-            axarr[row, col].set_title(title[k])
+            ax.set_title(title[k])
 
 
 @closeWithSave
@@ -218,19 +216,20 @@ def multiPredRange(key, actual, predicted,
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize, sharey=True)
     axarr = makeArray(axarr, 1)
     for (i, k) in enumerate(key):
+        ax = axarr[i]
         idx = np.argsort(actual[k])
-        axarr[i].plot(actual[k][idx], label='Actual',
-                      alpha=0.7, color='red')
-        axarr[i].plot(np.mean(predicted[k], axis=1)[idx], label='Predicted',
-                      linestyle='', marker='o', markersize=1)
-        axarr[i].fill_between(range(len(idx)),
-                              np.min(predicted[k], axis=1)[idx],
-                              np.max(predicted[k], axis=1)[idx],
-                              alpha=0.5, edgecolor=None)
-        axarr[i].set_title(k)
+        ax.plot(actual[k][idx], label='Actual',
+                alpha=0.7, color='red')
+        ax.plot(np.mean(predicted[k], axis=1)[idx], label='Predicted',
+                linestyle='', marker='o', markersize=1)
+        ax.fill_between(range(len(idx)),
+                        np.min(predicted[k], axis=1)[idx],
+                        np.max(predicted[k], axis=1)[idx],
+                        alpha=0.5, edgecolor=None)
+        ax.set_title(k)
         if xlabel is not None:
-            axarr[i].set_xlabel(xlabel)
+            ax.set_xlabel(xlabel)
         if i == 0:
-            axarr[i].legend()
+            ax.legend()
             if ylabel is not None:
-                axarr[i].set_ylabel(ylabel)
+                ax.set_ylabel(ylabel)
