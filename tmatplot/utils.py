@@ -15,20 +15,14 @@ def getRanges(data):
     return ranges
 
 
-def makeArray(axarr, ndim=2):
+def makeArray(axarr):
     if isinstance(axarr, np.ndarray):
-        if ndim == 2:
-            if axarr.ndim == 1:
-                return np.array([axarr])
-            else:
-                return axarr
+        if axarr.ndim == 1:
+            return np.array([axarr])
         else:
             return axarr
     else:
-        if ndim == 2:
-            return np.array([[axarr]])
-        else:
-            return np.array([axarr])
+        return np.array([[axarr]])
 
 
 def makeGrid(grid, objects):
@@ -61,6 +55,18 @@ def makeKwargs(idx=None, bins=None, labels=None,
     return kwargs
 
 
+def subplots(num_objects, grid, figsize=None, sharey=None):
+    grid = makeGrid(grid, num_objects)
+    kwargs = {}
+    if figsize is not None:
+        kwargs['figsize'] = figsize
+    if sharey is not None:
+        kwargs['sharey'] = sharey
+    f, axarr = plt.subplots(grid[0], grid[1], **kwargs)
+    axarr = makeArray(axarr)
+    return grid, axarr, f
+
+
 def closeWithSave(func):
     def wrapper(*args, **kwargs):
         results = func(*args, **kwargs)
@@ -79,7 +85,10 @@ def remove_utils(module_name):
     module = sys.modules[module_name]
     for util in dir(utils):
         if not util.startswith('_'):
-            delattr(module, util)
+            try:
+                delattr(module, util)
+            except:
+                None
     delattr(module, 'mpl')
     delattr(module, 'utils')
     delattr(module, 'styles')

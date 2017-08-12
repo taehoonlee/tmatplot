@@ -1,8 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
 
-from .utils import makeGrid
-from .utils import makeArray
+from .utils import subplots
 from .utils import makeKwargs
 from .utils import closeWithSave
 
@@ -15,15 +14,13 @@ def histAll(data, title=None, bins=None,
             color='#c5c5c5', edgecolor='None',
             xlabel=None, ylabel=None,
             savefile=None, grid=(None, 5), figsize=(10, 4)):
-    K = data.shape[1]
-    grid = makeGrid(grid, K)
-    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
-    axarr = makeArray(axarr)
+    grid, axarr, _ = subplots(data.shape[1], grid, figsize)
+
     kwargs = makeKwargs(bins=bins,
                         colors=color,
                         edgecolor=edgecolor)
 
-    for k in range(K):
+    for k in range(data.shape[1]):
         ax = axarr[k // grid[1], k % grid[1]]
         ax.hist(data[~np.isnan(data[:, k]), k], **kwargs)
 
@@ -109,13 +106,12 @@ def dualBar(data1, data2,
 
 
 @closeWithSave
-def multiBar(data, savefile=None, grid=(1, None), figsize=(8, 2)):
-    grid = makeGrid(grid, len(data))
-    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
-    axarr = makeArray(axarr, 1)
+def multiBar(data, savefile=None, grid=(1, None),
+             figsize=(8, 2), sharey=False):
+    grid, axarr, _ = subplots(len(data), grid, figsize, sharey)
 
     for (k, d) in enumerate(data):
-        ax = axarr[k]
+        ax = axarr[k // grid[1], k % grid[1]]
         ax.bar(range(len(d)), d)
 
 
@@ -125,16 +121,14 @@ def scatter(x, y, xlabel=None, ylabel=None,
             identityline=False, markersize=1,
             cmap='rainbow', colorbar=False, colorbar_labels=None,
             savefile=None, grid=(1, None), figsize=(8, 3)):
-    K = len(x)
+    grid, axarr, _ = subplots(len(x), grid, figsize)
+
     colors = np.linspace(0, 1, len(x[0]))
-    grid = makeGrid(grid, K)
-    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
-    axarr = makeArray(axarr)
 
     if suptitle is not None:
         plt.suptitle(suptitle)
 
-    for k in range(K):
+    for k in range(len(x)):
         ax = axarr[k // grid[1], k % grid[1]]
         if identityline:
             ax.plot([-5, 5], [-5, 5], 'k--', color='gray')
@@ -161,16 +155,14 @@ def hist(data, bins=None,
          labels=None, colors=None,
          xlabel=None, ylabel=None,
          title=None, suptitle=None,
-         savefile=None, grid=(1, None), figsize=(12, 3)):
-    K = len(data)
-    grid = makeGrid(grid, K)
-    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize, sharey=True)
-    axarr = makeArray(axarr)
+         savefile=None, grid=(1, None),
+         figsize=(12, 3), sharey=True):
+    grid, axarr, _ = subplots(len(data), grid, figsize, sharey)
 
     if suptitle is not None:
         plt.suptitle(suptitle)
 
-    for k in range(K):
+    for k in range(len(data)):
         ax = axarr[k // grid[1], k % grid[1]]
         if isinstance(data[k], list):
             for i in range(len(data[k])):
@@ -195,11 +187,10 @@ def hist(data, bins=None,
 def multiPredRange(key, actual, predicted,
                    xlabel, ylabel,
                    savefile=None, grid=(1, None), figsize=(12, 3)):
-    grid = makeGrid(grid, len(key))
-    f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize, sharey=True)
-    axarr = makeArray(axarr, 1)
+    grid, axarr, _ = subplots(len(key), grid, figsize, sharey=True)
+
     for (i, k) in enumerate(key):
-        ax = axarr[i]
+        ax = axarr[i // grid[1], i % grid[1]]
         idx = np.argsort(actual[k])
         ax.plot(actual[k][idx], label='Actual',
                 alpha=0.7, color='red')
