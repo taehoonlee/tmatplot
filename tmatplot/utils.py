@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from __future__ import division
 
 import numpy as np
@@ -49,3 +50,15 @@ def closeWithSave(func):
         plt.close()
         return results
     return wrapper
+
+
+def remove_utils(module_name):
+    import sys
+    from . import utils
+    module = sys.modules[module_name]
+    for util in dir(utils):
+        if not util.startswith('_'):
+            delattr(module, util)
+    delattr(module, 'mpl')
+    delattr(module, 'utils')
+    delattr(module, 'styles')
