@@ -121,7 +121,7 @@ def scatter(x, y, xlabel=None, ylabel=None,
             identityline=False, markersize=1,
             cmap='rainbow', colorbar=False, colorbar_labels=None,
             savefile=None, grid=(1, None), figsize=(8, 3)):
-    grid, axarr, _ = subplots(len(x), grid, figsize)
+    grid, axarr, f = subplots(len(x), grid, figsize)
 
     colors = np.linspace(0, 1, len(x[0]))
 
