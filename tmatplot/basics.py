@@ -131,7 +131,8 @@ def scatter(x, y, xlabel=None, ylabel=None,
     for k in range(len(x)):
         ax = axarr[k // grid[1], k % grid[1]]
         if identityline:
-            ax.plot([-5, 5], [-5, 5], 'k--', color='gray')
+            lim = (min(min(x[k]), min(y[k])), max(max(x[k]), max(y[k])))
+            ax.plot(lim, lim, 'k--', color='gray')
         sc = ax.scatter(x[k], y[k], c=colors,
                         cmap=cmap, s=markersize)
         if xlabel is not None:
