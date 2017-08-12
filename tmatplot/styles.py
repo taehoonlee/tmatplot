@@ -1,13 +1,30 @@
 import matplotlib as mpl
 
+
+def small():
+    mpl.rcParams['figure.dpi'] = 100
+    mpl.rcParams['savefig.dpi'] = 100
+
+
+def medium():
+    mpl.rcParams['figure.dpi'] = 200
+    mpl.rcParams['savefig.dpi'] = 200
+
+
+def large():
+    mpl.rcParams['figure.dpi'] = 300
+    mpl.rcParams['savefig.dpi'] = 300
+
+large()
+
 mpl.rcParams['xtick.direction'] = 'in'
 mpl.rcParams['ytick.direction'] = 'in'
-mpl.rcParams['axes.prop_cycle'] = mpl.cycler('color',
-                                             ['72a2dc', '0cadbb', '43bb97',
-                                              '8fbf73', 'd0c16a', 'febf3d',
-                                              'ffd200'])
-mpl.rcParams['figure.dpi'] = 300
-mpl.rcParams['savefig.dpi'] = 300
+mpl.rcParams['axes.prop_cycle'] = mpl.cycler(
+    'color',
+    ['72a2dc', '0cadbb', '43bb97',
+     '8fbf73', 'd0c16a', 'febf3d',
+     'ffd200'])
+
 mpl.rcParams['savefig.bbox'] = 'tight'
 
 mpl.rcParams['lines.linewidth'] = 1.0
