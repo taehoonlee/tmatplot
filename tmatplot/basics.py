@@ -3,6 +3,7 @@ from __future__ import division
 
 from .utils import makeGrid
 from .utils import makeArray
+from .utils import makeKwargs
 from .utils import closeWithSave
 
 import numpy as np
@@ -18,23 +19,12 @@ def histAll(data, title=None, bins=None,
     grid = makeGrid(grid, K)
     f, axarr = plt.subplots(grid[0], grid[1], figsize=figsize)
     axarr = makeArray(axarr)
+    kwargs = makeKwargs(bins=bins,
+                        colors=color,
+                        edgecolor=edgecolor)
 
     for k in range(K):
         ax = axarr[k // grid[1], k % grid[1]]
-
-        kwargs = {}
-        if bins is not None:
-            kwargs['bins'] = bins
-
-        if color is not None:
-            if isinstance(color, list):
-                kwargs['color'] = color[k]
-            else:
-                kwargs['color'] = color
-
-        if edgecolor is not None:
-            kwargs['edgecolor'] = edgecolor
-
         ax.hist(data[~np.isnan(data[:, k]), k], **kwargs)
 
         if title is not None:
@@ -184,17 +174,10 @@ def hist(data, bins=None,
         ax = axarr[k // grid[1], k % grid[1]]
         if isinstance(data[k], list):
             for i in range(len(data[k])):
-                kwargs = {}
-                if bins is not None:
-                    kwargs['bins'] = bins
-                if labels is not None:
-                    kwargs['label'] = labels[i]
-                if colors is not None:
-                    try:
-                        kwargs['alpha'] = 0.2
-                        kwargs['color'] = colors[i]
-                    except:
-                        kwargs['alpha'] = 0.5
+                kwargs = makeKwargs(idx=i,
+                                    bins=bins,
+                                    labels=labels,
+                                    colors=colors)
                 ax.hist(data[k][i], **kwargs)
         else:
             ax.hist(data[k])

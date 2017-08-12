@@ -40,6 +40,27 @@ def makeGrid(grid, objects):
         return (((objects - 1) // 5) + 1, 5)  # default is (x, 5)
 
 
+def makeKwargs(idx=None, bins=None, labels=None,
+               colors=None, alpha=False, edgecolor=None):
+    kwargs = {}
+    if bins is not None:
+        kwargs['bins'] = bins
+    if labels is not None:
+        kwargs['label'] = labels[idx]
+    if colors is not None:
+        if isinstance(colors, list):
+            kwargs['color'] = colors[idx]
+            if alpha:
+                kwargs['alpha'] = 0.2
+        else:
+            kwargs['color'] = colors
+            if alpha:
+                kwargs['alpha'] = 0.5
+    if edgecolor is not None:
+        kwargs['edgecolor'] = edgecolor
+    return kwargs
+
+
 def closeWithSave(func):
     def wrapper(*args, **kwargs):
         results = func(*args, **kwargs)
