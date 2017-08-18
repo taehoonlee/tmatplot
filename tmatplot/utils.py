@@ -15,25 +15,6 @@ def getRanges(data):
     return ranges
 
 
-def makeArray(axarr):
-    if isinstance(axarr, np.ndarray):
-        if axarr.ndim == 1:
-            return np.array([axarr])
-        else:
-            return axarr
-    else:
-        return np.array([[axarr]])
-
-
-def makeGrid(grid, objects):
-    if grid[0] is None:
-        return (((objects - 1) // grid[1]) + 1, grid[1])
-    elif grid[1] is None:
-        return (grid[0], ((objects - 1) // grid[0]) + 1)
-    else:
-        return (((objects - 1) // 5) + 1, 5)  # default is (x, 5)
-
-
 def makeKwargs(idx=None, bins=None, labels=None,
                colors=None, alpha=False, edgecolor=None):
     kwargs = {}
@@ -56,14 +37,26 @@ def makeKwargs(idx=None, bins=None, labels=None,
 
 
 def subplots(num_objects, grid, figsize=None, sharey=None):
-    grid = makeGrid(grid, num_objects)
+    if grid[0] is None:
+        grid = (((num_objects - 1) // grid[1]) + 1, grid[1])
+    elif grid[1] is None:
+        grid = (grid[0], ((num_objects - 1) // grid[0]) + 1)
+    else:
+        grid = (((num_objects - 1) // 5) + 1, 5)  # default is (x, 5)
+
     kwargs = {}
     if figsize is not None:
         kwargs['figsize'] = figsize
     if sharey is not None:
         kwargs['sharey'] = sharey
     f, axarr = plt.subplots(grid[0], grid[1], **kwargs)
-    axarr = makeArray(axarr)
+
+    if isinstance(axarr, np.ndarray):
+        if axarr.ndim == 1:
+            axarr = np.array([axarr])
+    else:
+        axarr = np.array([[axarr]])
+
     return grid, axarr, f
 
 
