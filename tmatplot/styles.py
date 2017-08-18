@@ -1,19 +1,22 @@
 import matplotlib as mpl
 
 
+def size(x):
+    mpl.rcParams['figure.dpi'] = x
+    mpl.rcParams['savefig.dpi'] = x
+
+
 def small():
-    mpl.rcParams['figure.dpi'] = 100
-    mpl.rcParams['savefig.dpi'] = 100
+    size(100)
 
 
 def medium():
-    mpl.rcParams['figure.dpi'] = 200
-    mpl.rcParams['savefig.dpi'] = 200
+    size(200)
 
 
 def large():
-    mpl.rcParams['figure.dpi'] = 300
-    mpl.rcParams['savefig.dpi'] = 300
+    size(300)
+
 
 large()
 
