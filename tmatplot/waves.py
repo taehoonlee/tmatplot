@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+@closeWithSave
 def wave(data, title,
          ts=None, tsfmt=None,
          overlay=True,
