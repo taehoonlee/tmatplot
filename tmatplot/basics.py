@@ -20,12 +20,12 @@ def histAll(data, title=None, bins=None,
                         colors=color,
                         edgecolor=edgecolor)
 
-    for k in range(data.shape[1]):
-        ax = axarr[k // grid[1], k % grid[1]]
-        ax.hist(data[~np.isnan(data[:, k]), k], **kwargs)
+    for i in range(data.shape[1]):
+        ax = axarr[i // grid[1], i % grid[1]]
+        ax.hist(data[~np.isnan(data[:, i]), i], **kwargs)
 
         if title is not None:
-            ax.set_title(title[k])
+            ax.set_title(title[i])
 
         if xlabel is None:
             plt.setp(ax.get_xticklabels(), visible=False)
@@ -110,8 +110,8 @@ def multiBar(data, savefile=None, grid=(1, None),
              figsize=(8, 2), sharey=False):
     grid, axarr, _ = subplots(len(data), grid, figsize, sharey)
 
-    for (k, d) in enumerate(data):
-        ax = axarr[k // grid[1], k % grid[1]]
+    for (i, d) in enumerate(data):
+        ax = axarr[i // grid[1], i % grid[1]]
         ax.bar(range(len(d)), d)
 
 
@@ -128,19 +128,19 @@ def scatter(x, y, xlabel=None, ylabel=None,
     if suptitle is not None:
         plt.suptitle(suptitle)
 
-    for k in range(len(x)):
-        ax = axarr[k // grid[1], k % grid[1]]
+    for i in range(len(x)):
+        ax = axarr[i // grid[1], i % grid[1]]
         if identityline:
-            lim = (min(min(x[k]), min(y[k])), max(max(x[k]), max(y[k])))
+            lim = (min(min(x[i]), min(y[i])), max(max(x[i]), max(y[i])))
             ax.plot(lim, lim, 'k--', color='gray')
-        sc = ax.scatter(x[k], y[k], c=colors,
+        sc = ax.scatter(x[i], y[i], c=colors,
                         cmap=cmap, s=markersize)
         if xlabel is not None:
             ax.set_xlabel(xlabel)
         if ylabel is not None:
             ax.set_ylabel(ylabel)
         if title is not None:
-            ax.set_title(title[k])
+            ax.set_title(title[i])
 
     if colorbar:
         cbar = f.colorbar(sc)
@@ -163,25 +163,25 @@ def hist(data, bins=None,
     if suptitle is not None:
         plt.suptitle(suptitle)
 
-    for k in range(len(data)):
-        ax = axarr[k // grid[1], k % grid[1]]
-        if isinstance(data[k], list):
-            for i in range(len(data[k])):
-                kwargs = makeKwargs(idx=i,
+    for i in range(len(data)):
+        ax = axarr[i // grid[1], i % grid[1]]
+        if isinstance(data[i], list):
+            for j in range(len(data[i])):
+                kwargs = makeKwargs(idx=j,
                                     bins=bins,
                                     labels=labels,
                                     colors=colors)
-                ax.hist(data[k][i], **kwargs)
+                ax.hist(data[i][j], **kwargs)
         else:
-            ax.hist(data[k])
+            ax.hist(data[i])
         if xlabel is not None:
             ax.set_xlabel(xlabel)
-        if k == 0:
+        if i == 0:
             ax.legend()
             if ylabel is not None:
                 ax.set_ylabel(ylabel)
         if title is not None:
-            ax.set_title(title[k])
+            ax.set_title(title[i])
 
 
 @closeWithSave
