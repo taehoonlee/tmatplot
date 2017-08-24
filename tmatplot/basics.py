@@ -10,33 +10,6 @@ import matplotlib.pyplot as plt
 
 
 @closeWithSave
-def histAll(data, title=None, bins=None,
-            color='#c5c5c5', edgecolor='None',
-            xlabel=None, ylabel=None,
-            savefile=None, grid=(None, 5), figsize=(10, 4)):
-    grid, axarr, _ = subplots(data.shape[1], grid, figsize)
-
-    kwargs = makeKwargs(bins=bins,
-                        colors=color,
-                        edgecolor=edgecolor)
-
-    for i in range(data.shape[1]):
-        ax = axarr[i // grid[1], i % grid[1]]
-        ax.hist(data[~np.isnan(data[:, i]), i], **kwargs)
-
-        if title is not None:
-            ax.set_title(title[i])
-
-        if xlabel is None:
-            plt.setp(ax.get_xticklabels(), visible=False)
-
-        if ylabel is None:
-            plt.setp(ax.get_yticklabels(), visible=False)
-
-    plt.tight_layout()
-
-
-@closeWithSave
 def corr(data, xlabel=None, ylabel=None,
          title=None, colorbar=True,
          window=None, sample=1000,
@@ -152,12 +125,12 @@ def scatter(x, y, xlabel=None, ylabel=None,
 
 
 @closeWithSave
-def hist(data, bins=None,
-         labels=None, colors=None,
+def hist(data, bins=None, labels=None,
+         colors=None, edgecolor=None,
          xlabel=None, ylabel=None,
          title=None, suptitle=None,
          savefile=None, grid=(1, None),
-         figsize=(12, 3), sharey=True):
+         figsize=(12, 3), sharey=True, tight=False):
     grid, axarr, _ = subplots(len(data), grid, figsize, sharey)
 
     if suptitle is not None:
@@ -170,18 +143,49 @@ def hist(data, bins=None,
                 kwargs = makeKwargs(idx=j,
                                     bins=bins,
                                     labels=labels,
-                                    colors=colors)
+                                    colors=colors,
+                                    edgecolor=edgecolor)
                 ax.hist(data[i][j], **kwargs)
         else:
-            ax.hist(data[i])
+            kwargs = makeKwargs(bins=bins,
+                                colors=colors,
+                                edgecolor=edgecolor)
+            d = data[i]
+            ax.hist(d[~np.isnan(d)], **kwargs)
+
         if xlabel is not None:
             ax.set_xlabel(xlabel)
-        if i == 0:
-            ax.legend()
+        else:
+            plt.setp(ax.get_xticklabels(), visible=False)
+
+        if sharey is True:
+            if i == 0:
+                ax.legend()
+                if ylabel is not None:
+                    ax.set_ylabel(ylabel)
+        else:
             if ylabel is not None:
                 ax.set_ylabel(ylabel)
+            else:
+                plt.setp(ax.get_yticklabels(), visible=False)
+
         if title is not None:
             ax.set_title(title[i])
+
+    if tight is True:
+        plt.tight_layout()
+
+
+def histAll(data, title=None, bins=None,
+            color='#c5c5c5', edgecolor='None',
+            xlabel=None, ylabel=None,
+            savefile=None, grid=(None, 5), figsize=(10, 4)):
+    listdata = [data[:, i] for i in range(data.shape[1])]
+    hist(listdata, title=title, bins=bins,
+         colors=color, edgecolor=edgecolor,
+         xlabel=xlabel, ylabel=ylabel,
+         savefile=savefile, grid=grid, figsize=figsize,
+         sharey=False, tight=True)
 
 
 @closeWithSave
