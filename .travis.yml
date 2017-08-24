@@ -23,14 +23,14 @@ install:
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pytest
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib pytest pytest-pep8
   - source activate test-environment
 
   - pip install .
 
 script:
   - if [[ "$TEST_MODE" == "PEP8" ]]; then
-       PYTHONPATH=$PWD:$PYTHONPATH py.test --pep8 -m pep8 -n0;
+       PYTHONPATH=$PWD:$PYTHONPATH py.test --pep8;
     else
        PYTHONPATH=$PWD:$PYTHONPATH py.test tests/;
     fi
