@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from .utils import getRanges
+from .utils import closeWithSave
 
 import numpy as np
 import matplotlib.pyplot as plt
