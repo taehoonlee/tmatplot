@@ -36,7 +36,8 @@ def makeKwargs(idx=None, bins=None, labels=None,
     return kwargs
 
 
-def subplots(num_objects, grid, figsize=None, sharey=None):
+def subplots(num_objects, grid, figsize=None,
+             sharex=None, sharey=None):
     if grid[0] is None:
         grid = (((num_objects - 1) // grid[1]) + 1, grid[1])
     elif grid[1] is None:
@@ -47,6 +48,8 @@ def subplots(num_objects, grid, figsize=None, sharey=None):
     kwargs = {}
     if figsize is not None:
         kwargs['figsize'] = figsize
+    if sharex is not None:
+        kwargs['sharex'] = sharex
     if sharey is not None:
         kwargs['sharey'] = sharey
     f, axarr = plt.subplots(grid[0], grid[1], **kwargs)
