@@ -9,8 +9,8 @@ def getRanges(data):
     from operator import itemgetter
     from itertools import groupby
     ranges = []
-    for k, g in groupby(enumerate(data), lambda (i, x): i-x):
-        group = map(itemgetter(1), g)
+    for k, g in groupby(enumerate(data), lambda i: i[0] - i[1]):
+        group = list(map(itemgetter(1), g))
         ranges.append((group[0], group[-1]))
     return ranges
 
