@@ -1,12 +1,14 @@
-dist: trusty
 language: python
 matrix:
-    include:
-        - python: 2.7
-          env: TEST_MODE=PEP8
-        - python: 2.7
+  include:
+    - python: 2.7
+      env: TEST_MODE=PEP8
+    - python: 2.7
+    - python: 3.5
 notifications:
   email: false
+# Adapted from
+# https://conda.io/docs/user-guide/tasks/use-conda-with-travis-ci.html
 install:
   - sudo apt-get update
   # We do this conditionally because it saves us some downloading if the
