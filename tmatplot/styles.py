@@ -18,17 +18,26 @@ def large():
     size(300)
 
 
+def colors(c=0):
+    if c == 0:
+        # adapted from the parula(8) function in MATLAB
+        mpl.rcParams['axes.prop_cycle'] = mpl.cycler(
+            'color',
+            ['72a2dc', '0cadbb', '43bb97',
+             '8fbf73', 'd0c16a', 'febf3d',
+             'ffd200'])
+    elif c == 1:
+        # adapted from https://www.materialui.co/colors
+        mpl.rcParams['axes.prop_cycle'] = mpl.cycler(
+            'color',
+            ['EF5350', 'EC407A', 'AB47BC', '7E57C2', '5C6BC0',
+             '42A5F5', '29B6F6', '26C6DA', '26A69A', '66BB6A',
+             '9CCC65', 'D4E157', 'FFEE58', 'FFCA28', 'FFA726',
+             'FF7043'])
+
+
 large()
-
-mpl.rcParams['xtick.direction'] = 'in'
-mpl.rcParams['ytick.direction'] = 'in'
-mpl.rcParams['axes.prop_cycle'] = mpl.cycler(
-    'color',
-    ['72a2dc', '0cadbb', '43bb97',
-     '8fbf73', 'd0c16a', 'febf3d',
-     'ffd200'])
-
-mpl.rcParams['savefig.bbox'] = 'tight'
+colors()
 
 mpl.rcParams['lines.linewidth'] = 1.0
 mpl.rcParams['lines.dashed_pattern'] = [6, 6]
@@ -39,9 +48,14 @@ mpl.rcParams['lines.scale_dashes'] = False
 mpl.rcParams['axes.grid'] = True
 mpl.rcParams['axes.xmargin'] = 0.0
 
+mpl.rcParams['xtick.direction'] = 'in'
+mpl.rcParams['ytick.direction'] = 'in'
+
+mpl.rcParams['image.interpolation'] = 'nearest'
+mpl.rcParams['image.cmap'] = 'rainbow'
+
 mpl.rcParams['grid.color'] = '#666666'
 mpl.rcParams['grid.linestyle'] = ':'
 mpl.rcParams['grid.linewidth'] = 0.5
 
-mpl.rcParams['image.cmap'] = 'rainbow'
-mpl.rcParams['image.interpolation'] = 'nearest'
+mpl.rcParams['savefig.bbox'] = 'tight'
