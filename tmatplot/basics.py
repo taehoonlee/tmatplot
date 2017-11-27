@@ -113,14 +113,17 @@ def multiBar(data, xlabel=None, ylabel=None,
 
 
 @closeWithSave
-def scatter(x, y, xlabel=None, ylabel=None,
+def scatter(x, y, c=None, xlabel=None, ylabel=None,
             title=None, suptitle=None,
-            identityline=False, markersize=1,
-            cmap='rainbow', colorbar=False, colorbar_labels=None,
+            identityline=False, marker=None, markersize=1,
+            cmap='rainbow', alpha=None, labels=None,
+            colorbar=False, colorbar_labels=None,
             savefile=None, grid=(1, None), figsize=(8, 3)):
+    if not isinstance(x, list):
+        x = [x]
+    if not isinstance(y, list):
+        y = [y]
     grid, axarr, f = subplots(len(x), grid, figsize)
-
-    colors = np.linspace(0, 1, len(x[0]))
 
     if suptitle is not None:
         plt.suptitle(suptitle)
@@ -130,8 +133,24 @@ def scatter(x, y, xlabel=None, ylabel=None,
         if identityline:
             lim = (min(min(x[i]), min(y[i])), max(max(x[i]), max(y[i])))
             ax.plot(lim, lim, 'k--', color='gray')
-        sc = ax.scatter(x[i], y[i], c=colors,
-                        cmap=cmap, s=markersize)
+        if (c is None) and (cmap is not None):
+            c = np.linspace(0, 1, len(x[i]))
+        kwargs = {}
+        if cmap is not None:
+            kwargs['cmap'] = cmap
+        if c is not None:
+            kwargs['c'] = c
+        if alpha is not None:
+            kwargs['alpha'] = alpha
+        if marker is not None:
+            kwargs['marker'] = marker
+        kwargs['s'] = markersize
+        if labels is not None:
+            kwargs.pop('c')
+            for (j, label) in enumerate(labels):
+                sc = ax.scatter(x[i][c==j], y[i][c==j], label=label, **kwargs)
+        else:
+            sc = ax.scatter(x[i], y[i], **kwargs)
         if xlabel is not None:
             ax.set_xlabel(xlabel)
         if ylabel is not None:
@@ -139,11 +158,14 @@ def scatter(x, y, xlabel=None, ylabel=None,
         if title is not None:
             ax.set_title(title[i])
 
+    if labels is not None:
+        ax.legend(bbox_to_anchor=(1.05, 1), loc=2)
+
     if colorbar:
         cbar = f.colorbar(sc)
         if colorbar_labels is not None:
             yticks = cbar.ax.get_yticks()
-            ytlabels = colorbar_labels[::len(colors) // (len(yticks) - 1) - 1]
+            ytlabels = colorbar_labels[::len(c) // (len(yticks) - 1) - 1]
             cbar.set_ticks(yticks)
             cbar.set_ticklabels(ytlabels)
 
