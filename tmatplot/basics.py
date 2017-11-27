@@ -155,7 +155,7 @@ def hist(data, bins=None, labels=None,
          title=None, suptitle=None,
          savefile=None, grid=(1, None),
          figsize=(12, 3), sharey=True, tight=False):
-    grid, axarr, _ = subplots(len(data), grid, figsize, sharey)
+    grid, axarr, _ = subplots(len(data), grid, figsize, sharey=sharey)
 
     if suptitle is not None:
         plt.suptitle(suptitle)
