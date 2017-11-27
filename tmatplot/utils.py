@@ -16,7 +16,7 @@ def getRanges(data):
 
 
 def makeKwargs(idx=None, bins=None, labels=None,
-               colors=None, alphas=None, edgecolors=None):
+               colors=None, alphas=None, edgecolors=None, markers=None):
     kwargs = {}
     if bins is not None:
         kwargs['bins'] = bins
@@ -37,6 +37,11 @@ def makeKwargs(idx=None, bins=None, labels=None,
         kwargs['edgecolor'] = edgecolors[idx]
     elif edgecolors is not None:
         kwargs['edgecolor'] = edgecolors
+
+    if isinstance(markers, list):
+        kwargs['marker'] = markers[idx]
+    elif markers is not None:
+        kwargs['marker'] = markers
 
     return kwargs
 

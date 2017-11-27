@@ -83,7 +83,7 @@ def multiBar(data, xlabel=None, ylabel=None,
              title=None, suptitle=None,
              colors='C0', edgecolors='None',
              savefile=None, grid=(1, None),
-             figsize=(8, 2), sharey=False):
+             figsize=(8, 2), sharey=False, tight=True):
     grid, axarr, _ = subplots(len(data), grid, figsize, sharey=sharey)
 
     if suptitle is not None:
@@ -109,7 +109,8 @@ def multiBar(data, xlabel=None, ylabel=None,
         elif title is not None:
             ax.set_title(title)
 
-    plt.tight_layout()
+    if tight is True:
+        plt.tight_layout()
 
 
 @closeWithSave
@@ -128,29 +129,25 @@ def scatter(x, y, c=None, xlabel=None, ylabel=None,
     if suptitle is not None:
         plt.suptitle(suptitle)
 
-    for i in range(len(x)):
+    for (i, (_x, _y)) in enumerate(zip(x, y)):
         ax = axarr[i // grid[1], i % grid[1]]
         if identityline:
-            lim = (min(min(x[i]), min(y[i])), max(max(x[i]), max(y[i])))
+            lim = (min(min(_x), min(_y)), max(max(_x), max(_y)))
             ax.plot(lim, lim, 'k--', color='gray')
         if (c is None) and (cmap is not None):
-            c = np.linspace(0, 1, len(x[i]))
-        kwargs = {}
+            c = np.linspace(0, 1, len(_x))
+        kwargs = makeKwargs(idx=i, alphas=alpha, markers=marker)
+        kwargs['s'] = markersize
         if cmap is not None:
             kwargs['cmap'] = cmap
         if c is not None:
             kwargs['c'] = c
-        if alpha is not None:
-            kwargs['alpha'] = alpha
-        if marker is not None:
-            kwargs['marker'] = marker
-        kwargs['s'] = markersize
         if labels is not None:
             kwargs.pop('c')
             for (j, label) in enumerate(labels):
-                sc = ax.scatter(x[i][c==j], y[i][c==j], label=label, **kwargs)
+                sc = ax.scatter(_x[c == j], _y[c == j], label=label, **kwargs)
         else:
-            sc = ax.scatter(x[i], y[i], **kwargs)
+            sc = ax.scatter(_x, _y, **kwargs)
         if xlabel is not None:
             ax.set_xlabel(xlabel)
         if ylabel is not None:
@@ -182,23 +179,22 @@ def hist(data, bins=None, labels=None,
     if suptitle is not None:
         plt.suptitle(suptitle)
 
-    for i in range(len(data)):
+    for (i, d) in enumerate(data):
         ax = axarr[i // grid[1], i % grid[1]]
-        if isinstance(data[i], list):
-            for j in range(len(data[i])):
+        if isinstance(d, list):
+            for j in range(len(d)):
                 kwargs = makeKwargs(idx=j,
                                     bins=bins,
                                     labels=labels,
                                     colors=colors,
                                     alphas=alphas,
                                     edgecolors=edgecolors)
-                ax.hist(data[i][j], **kwargs)
+                ax.hist(d[j], **kwargs)
         else:
             kwargs = makeKwargs(bins=bins,
                                 colors=colors,
                                 alphas=alphas,
                                 edgecolors=edgecolors)
-            d = data[i]
             ax.hist(d[~np.isnan(d)], **kwargs)
 
         if xlabel is not None:
