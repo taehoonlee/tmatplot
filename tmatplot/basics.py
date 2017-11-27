@@ -51,24 +51,24 @@ def corr(data, xlabel=None, ylabel=None,
 
 @closeWithSave
 def dualBar(data1, data2,
-            color1='#999999',
+            color1='#999999', color2='C0',
             title=None, xlabel=None,
             ylabel1=None, ylabel2=None, width=3,
             savefile=None, figsize=(8, 3)):
     plt.figure(figsize=figsize)
-    ax1 = plt.gca()
-    ax2 = plt.gca().twinx()
 
     K = data1.shape[0]
-    ax1.bar(width*np.arange(K)-width*0.2, np.mean(data1, axis=1), width*0.35,
-            yerr=np.std(data1, axis=1), color=color1)
-    ax2.bar(width*np.arange(K)+width*0.2, np.mean(data2, axis=1), width*0.35,
-            yerr=np.std(data2, axis=1))
+    for (i, (ax, data, color, ylabel)) in \
+        enumerate(zip([plt.gca(), plt.gca().twinx()],
+                      [data1, data2], [color1, color2], [ylabel1, ylabel2])):
+        ax.bar(width * (np.arange(K) + 0.4 * (i - 0.5)),
+               np.mean(data, axis=1),
+               width * 0.35,
+               yerr=np.std(data, axis=1),
+               color=color)
 
-    if ylabel1 is not None:
-        ax1.set_ylabel(ylabel1, color='gray')
-    if ylabel2 is not None:
-        ax2.set_ylabel(ylabel2)
+        if ylabel is not None:
+            ax.set_ylabel(ylabel, color=color)
 
     if title is not None:
         plt.title(title)
@@ -79,13 +79,37 @@ def dualBar(data1, data2,
 
 
 @closeWithSave
-def multiBar(data, savefile=None, grid=(1, None),
+def multiBar(data, xlabel=None, ylabel=None,
+             title=None, suptitle=None,
+             colors='C0', edgecolor='None',
+             savefile=None, grid=(1, None),
              figsize=(8, 2), sharey=False):
-    grid, axarr, _ = subplots(len(data), grid, figsize, sharey)
+    grid, axarr, _ = subplots(len(data), grid, figsize, sharey=sharey)
+
+    if suptitle is not None:
+        plt.suptitle(suptitle)
 
     for (i, d) in enumerate(data):
         ax = axarr[i // grid[1], i % grid[1]]
-        ax.bar(range(len(d)), d)
+        kwargs = makeKwargs(idx=i, colors=colors, edgecolor=edgecolor)
+        ax.bar(range(len(d)), d, **kwargs)
+
+        if isinstance(xlabel, list):
+            ax.set_xlabel(xlabel[i])
+        elif (xlabel is not None) and (i == 0):
+            ax.set_xlabel(xlabel)
+
+        if isinstance(ylabel, list):
+            ax.set_xlabel(ylabel[i])
+        elif (ylabel is not None) and (i == 0):
+            ax.set_ylabel(ylabel)
+
+        if isinstance(title, list):
+            ax.set_title(title[i])
+        elif title is not None:
+            ax.set_title(title)
+
+    plt.tight_layout()
 
 
 @closeWithSave
