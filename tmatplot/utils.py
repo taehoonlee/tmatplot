@@ -16,23 +16,28 @@ def getRanges(data):
 
 
 def makeKwargs(idx=None, bins=None, labels=None,
-               colors=None, alpha=False, edgecolor=None):
+               colors=None, alphas=None, edgecolors=None):
     kwargs = {}
     if bins is not None:
         kwargs['bins'] = bins
     if labels is not None:
         kwargs['label'] = labels[idx]
-    if colors is not None:
-        if isinstance(colors, list):
-            kwargs['color'] = colors[idx]
-            if alpha:
-                kwargs['alpha'] = 0.2
-        else:
-            kwargs['color'] = colors
-            if alpha:
-                kwargs['alpha'] = 0.5
-    if edgecolor is not None:
-        kwargs['edgecolor'] = edgecolor
+
+    if isinstance(colors, list):
+        kwargs['color'] = colors[idx]
+    elif colors is not None:
+        kwargs['color'] = colors
+
+    if isinstance(alphas, list):
+        kwargs['alpha'] = alphas[idx]
+    elif alphas is not None:
+        kwargs['alpha'] = alphas
+
+    if isinstance(edgecolors, list):
+        kwargs['edgecolor'] = edgecolors[idx]
+    elif edgecolors is not None:
+        kwargs['edgecolor'] = edgecolors
+
     return kwargs
 
 

@@ -81,7 +81,7 @@ def dualBar(data1, data2,
 @closeWithSave
 def multiBar(data, xlabel=None, ylabel=None,
              title=None, suptitle=None,
-             colors='C0', edgecolor='None',
+             colors='C0', edgecolors='None',
              savefile=None, grid=(1, None),
              figsize=(8, 2), sharey=False):
     grid, axarr, _ = subplots(len(data), grid, figsize, sharey=sharey)
@@ -91,7 +91,7 @@ def multiBar(data, xlabel=None, ylabel=None,
 
     for (i, d) in enumerate(data):
         ax = axarr[i // grid[1], i % grid[1]]
-        kwargs = makeKwargs(idx=i, colors=colors, edgecolor=edgecolor)
+        kwargs = makeKwargs(idx=i, colors=colors, edgecolors=edgecolors)
         ax.bar(range(len(d)), d, **kwargs)
 
         if isinstance(xlabel, list):
@@ -150,7 +150,7 @@ def scatter(x, y, xlabel=None, ylabel=None,
 
 @closeWithSave
 def hist(data, bins=None, labels=None,
-         colors=None, edgecolor=None,
+         colors=None, alphas=None, edgecolors=None,
          xlabel=None, ylabel=None,
          title=None, suptitle=None,
          savefile=None, grid=(1, None),
@@ -168,12 +168,14 @@ def hist(data, bins=None, labels=None,
                                     bins=bins,
                                     labels=labels,
                                     colors=colors,
-                                    edgecolor=edgecolor)
+                                    alphas=alphas,
+                                    edgecolors=edgecolors)
                 ax.hist(data[i][j], **kwargs)
         else:
             kwargs = makeKwargs(bins=bins,
                                 colors=colors,
-                                edgecolor=edgecolor)
+                                alphas=alphas,
+                                edgecolors=edgecolors)
             d = data[i]
             ax.hist(d[~np.isnan(d)], **kwargs)
 
@@ -206,7 +208,7 @@ def histAll(data, title=None, bins=None,
             savefile=None, grid=(None, 5), figsize=(10, 4)):
     listdata = [data[:, i] for i in range(data.shape[1])]
     hist(listdata, title=title, bins=bins,
-         colors=color, edgecolor=edgecolor,
+         colors=color, edgecolors=edgecolor,
          xlabel=xlabel, ylabel=ylabel,
          savefile=savefile, grid=grid, figsize=figsize,
          sharey=False, tight=True)
