@@ -235,8 +235,9 @@ def histAll(data, title=None, bins=None,
 @closeWithSave
 def multiPredRange(key, actual, predicted,
                    xlabel, ylabel,
-                   savefile=None, grid=(1, None), figsize=(12, 3)):
-    grid, axarr, _ = subplots(len(key), grid, figsize, sharey=True)
+                   savefile=None, grid=(1, None), figsize=(12, 3),
+                   sharey=True, tight=True):
+    grid, axarr, _ = subplots(len(key), grid, figsize, sharey=sharey)
 
     for (i, k) in enumerate(key):
         ax = axarr[i // grid[1], i % grid[1]]
@@ -256,3 +257,6 @@ def multiPredRange(key, actual, predicted,
             ax.legend()
             if ylabel is not None:
                 ax.set_ylabel(ylabel)
+
+    if tight is True:
+        plt.tight_layout()

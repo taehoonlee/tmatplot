@@ -15,7 +15,8 @@ def wave(data, title,
          xlabel=None, ylabel=None,
          pointidx=None,
          fillidx=None, fillcolor='red',
-         savefile=None, figsize=(10, 2)):
+         savefile=None, figsize=(10, 2),
+         sharex=True, tight=False):
     if data.ndim == 1:
         data = np.expand_dims(data, -1)
     T, F = data.shape
@@ -35,7 +36,7 @@ def wave(data, title,
                     plt.plot(p, data[p], 'ro')
     else:
         figsize = (figsize[0], F * figsize[1])
-        _, axarr, _ = subplots(F, (None, 1), figsize=figsize, sharex=True)
+        _, axarr, _ = subplots(F, (None, 1), figsize=figsize, sharex=sharex)
         for i in range(F):
             ax = axarr[0, i]
             ax.plot(data[:, i])
@@ -79,6 +80,9 @@ def wave(data, title,
                                    facecolor=fillcolor, alpha=0.2,
                                    interpolate=False)
                 ax[i].set_ylim(ylim)
+
+    if tight is True:
+        plt.tight_layout()
 
 
 def abnormal(data, title, ts, events, threshold, cont=12, tsfmt=None):
