@@ -119,7 +119,8 @@ def scatter(x, y, c=None, xlabel=None, ylabel=None,
             identityline=False, marker=None, markersize=1,
             cmap='rainbow', alpha=None, labels=None,
             colorbar=False, colorbar_labels=None,
-            savefile=None, grid=(1, None), figsize=(8, 3)):
+            savefile=None, grid=(1, None), figsize=(8, 3),
+            tight=False):
     if not isinstance(x, list):
         x = [x]
     if not isinstance(y, list):
@@ -165,6 +166,9 @@ def scatter(x, y, c=None, xlabel=None, ylabel=None,
             ytlabels = colorbar_labels[::len(c) // (len(yticks) - 1) - 1]
             cbar.set_ticks(yticks)
             cbar.set_ticklabels(ytlabels)
+
+    if tight is True:
+        plt.tight_layout()
 
 
 @closeWithSave
