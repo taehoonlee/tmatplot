@@ -1,9 +1,9 @@
 from __future__ import absolute_import
 
-from .styles import *
-
 from .basics import *
 from .waves import *
+
+from .styles import *
 
 from .utils import remove_utils
 
