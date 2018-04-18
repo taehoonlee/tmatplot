@@ -30,6 +30,8 @@ def get_colors(c):
                 '42A5F5', '29B6F6', '26C6DA', '26A69A', '66BB6A',
                 '9CCC65', 'D4E157', 'FFEE58', 'FFCA28', 'FFA726',
                 'FF7043']
+
+
 def colors(c=0):
     mpl.rcParams['axes.prop_cycle'] = mpl.cycler('color', get_colors(c))
 
