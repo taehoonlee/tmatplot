@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 def corr(data, xlabel=None, ylabel=None,
          title=None, colorbar=True,
          window=None, sample=1000,
-         savefile=None, figsize=(8, 6)):
+         savefile=None, close=True, figsize=(8, 6)):
     plt.figure(figsize=figsize)
     if window is not None:
         corrcoef = []
@@ -54,7 +54,7 @@ def dualBar(data1, data2,
             color1='#999999', color2='C0',
             title=None, xlabel=None,
             ylabel1=None, ylabel2=None, width=3,
-            savefile=None, figsize=(8, 3)):
+            savefile=None, close=True, figsize=(8, 3)):
     plt.figure(figsize=figsize)
 
     K = data1.shape[0]
@@ -82,8 +82,9 @@ def dualBar(data1, data2,
 def multiBar(data, xlabel=None, ylabel=None,
              title=None, suptitle=None,
              colors='C0', edgecolors='None',
-             savefile=None, grid=(1, None),
-             figsize=(8, 2), sharey=False, tight=True):
+             savefile=None, close=True,
+             grid=(1, None), figsize=(8, 2),
+             sharey=False, tight=True):
     grid, axarr, _ = subplots(len(data), grid, figsize, sharey=sharey)
 
     if suptitle is not None:
@@ -97,7 +98,8 @@ def multiBar(data, xlabel=None, ylabel=None,
         if isinstance(xlabel, list):
             ax.set_xlabel(xlabel[i])
         elif (xlabel is not None) and (i == 0):
-            ax.set_xlabel(xlabel)
+            ax.set_xticks(range(len(xlabel)))
+            ax.set_xticklabels(xlabel, rotation='45')
 
         if isinstance(ylabel, list):
             ax.set_xlabel(ylabel[i])
@@ -119,8 +121,8 @@ def scatter(x, y, c=None, xlabel=None, ylabel=None,
             identityline=False, marker=None, markersize=1,
             cmap='rainbow', alpha=None, labels=None,
             colorbar=False, colorbar_labels=None,
-            savefile=None, grid=(1, None), figsize=(8, 3),
-            tight=False):
+            savefile=None, close=True,
+            grid=(1, None), figsize=(8, 3), tight=False):
     if not isinstance(x, list):
         x = [x]
     if not isinstance(y, list):
@@ -176,8 +178,9 @@ def hist(data, bins=None, labels=None,
          colors=None, alphas=None, edgecolors=None,
          xlabel=None, ylabel=None,
          title=None, suptitle=None,
-         savefile=None, grid=(1, None),
-         figsize=(12, 3), sharey=True, tight=False):
+         savefile=None, close=True,
+         grid=(1, None), figsize=(12, 3),
+         sharey=True, tight=False):
     grid, axarr, _ = subplots(len(data), grid, figsize, sharey=sharey)
 
     if suptitle is not None:
@@ -227,7 +230,8 @@ def hist(data, bins=None, labels=None,
 def histAll(data, title=None, bins=None,
             color='#c5c5c5', edgecolor='None',
             xlabel=None, ylabel=None,
-            savefile=None, grid=(None, 5), figsize=(10, 4)):
+            savefile=None, close=True,
+            grid=(None, 5), figsize=(10, 4)):
     listdata = [data[:, i] for i in range(data.shape[1])]
     hist(listdata, title=title, bins=bins,
          colors=color, edgecolors=edgecolor,
@@ -239,7 +243,8 @@ def histAll(data, title=None, bins=None,
 @closeWithSave
 def multiPredRange(key, actual, predicted,
                    xlabel, ylabel,
-                   savefile=None, grid=(1, None), figsize=(12, 3),
+                   savefile=None, close=True,
+                   grid=(1, None), figsize=(12, 3),
                    sharey=True, tight=True):
     grid, axarr, _ = subplots(len(key), grid, figsize, sharey=sharey)
 

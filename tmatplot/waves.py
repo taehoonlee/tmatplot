@@ -19,7 +19,7 @@ def wave(data, title,
          xlabel=None, ylabel=None,
          pointidx=None,
          fillidx=None, fillcolor='red',
-         savefile=None, figsize=(10, 2),
+         savefile=None, close=True, figsize=(10, 2),
          sharex=True, tight=False):
     if data.ndim == 1:
         data = np.expand_dims(data, -1)

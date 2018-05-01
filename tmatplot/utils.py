@@ -18,7 +18,9 @@ def getRanges(data):
 def makeKwargs(idx=None, bins=None, labels=None,
                colors=None, alphas=None, edgecolors=None, markers=None):
     kwargs = {}
-    if bins is not None:
+    if isinstance(bins, list):
+        kwargs['bins'] = bins[idx]
+    elif bins is not None:
         kwargs['bins'] = bins
     if labels is not None:
         kwargs['label'] = labels[idx]
@@ -77,10 +79,12 @@ def closeWithSave(func):
     def wrapper(*args, **kwargs):
         results = func(*args, **kwargs)
         savefile = kwargs.get('savefile', None)
+        close = kwargs.get('close', True)
         if savefile is not None:
             plt.savefig(savefile)
-        plt.show()
-        plt.close()
+        if close is True:
+            plt.show()
+            plt.close()
         return results
     return wrapper
 
