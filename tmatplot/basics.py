@@ -98,7 +98,8 @@ def multiBar(data, xlabel=None, ylabel=None,
         if isinstance(xlabel, list):
             ax.set_xlabel(xlabel[i])
         elif (xlabel is not None) and (i == 0):
-            ax.set_xlabel(xlabel)
+            ax.set_xticks(range(len(xlabel)))
+            ax.set_xticklabels(xlabel, rotation='45')
 
         if isinstance(ylabel, list):
             ax.set_xlabel(ylabel[i])
