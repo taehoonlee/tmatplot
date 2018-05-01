@@ -77,10 +77,12 @@ def closeWithSave(func):
     def wrapper(*args, **kwargs):
         results = func(*args, **kwargs)
         savefile = kwargs.get('savefile', None)
+        close = kwargs.get('close', True)
         if savefile is not None:
             plt.savefig(savefile)
-        plt.show()
-        plt.close()
+        if close is True:
+            plt.show()
+            plt.close()
         return results
     return wrapper
 
