@@ -176,7 +176,7 @@ def scatter(x, y, c=None, xlabel=None, ylabel=None,
 
 @closeWithSave
 def hist(data, bins=None, labels=None,
-         groupby=None, normed=False,
+         groupby=None, density=False,
          colors=None, alphas=None, edgecolors=None,
          xlabel=None, ylabel=None,
          title=None, suptitle=None,
@@ -184,14 +184,14 @@ def hist(data, bins=None, labels=None,
          grid=(1, None), figsize=(12, 3),
          sharey=True, tight=False):
     if groupby is not None:
+        _bins = bins
+        bins = []
+        for i in range(data.shape[1]):
+            _, b = np.histogram(data[:, i], bins=_bins)
+            bins.append(b)
         groups = np.unique(groupby)
         data = [[data[groupby == g, i] for g in groups]
                 for i in range(data.shape[1])]
-        _bins = bins
-        bins = []
-        for d in data:
-            _, b = np.histogram(d, bins=_bins)
-            bins.append(b)
         if colors is None:
             colors = get_colors(1)
             if len(groups) < len(colors) // 2:
@@ -210,7 +210,7 @@ def hist(data, bins=None, labels=None,
                 _bins = bins[i] if groupby is not None else bins
                 kwargs = makeKwargs(idx=j,
                                     bins=_bins,
-                                    normed=normed,
+                                    density=density,
                                     labels=labels,
                                     colors=colors,
                                     alphas=alphas,
@@ -218,7 +218,7 @@ def hist(data, bins=None, labels=None,
                 ax.hist(d[j], **kwargs)
         else:
             kwargs = makeKwargs(bins=bins,
-                                normed=normed,
+                                density=density,
                                 colors=colors,
                                 alphas=alphas,
                                 edgecolors=edgecolors)
