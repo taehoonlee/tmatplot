@@ -15,13 +15,15 @@ def getRanges(data):
     return ranges
 
 
-def makeKwargs(idx=None, bins=None, labels=None,
+def makeKwargs(idx=None, bins=None, normed=None, labels=None,
                colors=None, alphas=None, edgecolors=None, markers=None):
     kwargs = {}
     if isinstance(bins, list):
         kwargs['bins'] = bins[idx]
     elif bins is not None:
         kwargs['bins'] = bins
+    if normed is not None:
+        kwargs['normed'] = normed
     if labels is not None:
         kwargs['label'] = labels[idx]
 

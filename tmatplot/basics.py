@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 from __future__ import division
 
+from .styles import get_colors
 from .utils import subplots
 from .utils import makeKwargs
 from .utils import closeWithSave
@@ -175,12 +176,28 @@ def scatter(x, y, c=None, xlabel=None, ylabel=None,
 
 @closeWithSave
 def hist(data, bins=None, labels=None,
+         groupby=None, normed=False,
          colors=None, alphas=None, edgecolors=None,
          xlabel=None, ylabel=None,
          title=None, suptitle=None,
          savefile=None, close=True,
          grid=(1, None), figsize=(12, 3),
          sharey=True, tight=False):
+    if groupby is not None:
+        groups = np.unique(groupby)
+        data = [[data[groupby == g, i] for g in groups]
+                for i in range(data.shape[1])]
+        _bins = bins
+        bins = []
+        for d in data:
+            _, b = np.histogram(d, bins=_bins)
+            bins.append(b)
+        if colors is None:
+            colors = get_colors(1)
+            if len(groups) < len(colors) // 2:
+                colors = colors[::2]
+            colors = ['#%s' % c for c in colors]
+
     grid, axarr, _ = subplots(len(data), grid, figsize, sharey=sharey)
 
     if suptitle is not None:
@@ -190,8 +207,10 @@ def hist(data, bins=None, labels=None,
         ax = axarr[i // grid[1], i % grid[1]]
         if isinstance(d, list):
             for j in range(len(d)):
+                _bins = bins[i] if groupby is not None else bins
                 kwargs = makeKwargs(idx=j,
-                                    bins=bins,
+                                    bins=_bins,
+                                    normed=normed,
                                     labels=labels,
                                     colors=colors,
                                     alphas=alphas,
@@ -199,6 +218,7 @@ def hist(data, bins=None, labels=None,
                 ax.hist(d[j], **kwargs)
         else:
             kwargs = makeKwargs(bins=bins,
+                                normed=normed,
                                 colors=colors,
                                 alphas=alphas,
                                 edgecolors=edgecolors)
