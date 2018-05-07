@@ -194,7 +194,7 @@ def hist(data, bins=None, labels=None,
                 for i in range(data.shape[1])]
         if colors is None:
             colors = get_colors(1)
-            if len(groups) < len(colors) // 2:
+            if len(groups) <= len(colors) // 2:
                 colors = colors[::2]
             colors = ['#%s' % c for c in colors]
 
