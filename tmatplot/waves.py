@@ -126,19 +126,6 @@ def lotwave(data, title, suptitle=None,
     else:
         sampling = 1
 
-    if meta is not None and stepfilter is True:
-        idx = meta[:, 3].astype(np.int32) > 0
-        data = data[idx]
-        if ts is not None:
-            ts = ts[idx]
-        meta = meta[idx]
-
-        idx = np.array([('IDLE' in x) or ('TEST' in x) for x in meta[:, 1]])
-        data = data[~idx]
-        if ts is not None:
-            ts = ts[~idx]
-        meta = meta[~idx]
-
     step_id = meta[:, 3].astype(np.float32)
     T, F = data.shape
 
