@@ -16,7 +16,8 @@ def getRanges(data):
 
 
 def makeKwargs(idx=None, bins=None, density=None, labels=None,
-               colors=None, alphas=None, edgecolors=None, markers=None):
+               colors=None, alphas=None, edgecolors=None, markers=None,
+               singleconf=False):
     kwargs = {}
     if isinstance(bins, list):
         kwargs['bins'] = bins[idx]
@@ -28,22 +29,34 @@ def makeKwargs(idx=None, bins=None, density=None, labels=None,
         kwargs['label'] = labels[idx]
 
     if isinstance(colors, list):
-        kwargs['color'] = colors[idx]
+        if singleconf is True:
+            kwargs['color'] = colors
+        else:
+            kwargs['color'] = colors[idx]
     elif colors is not None:
         kwargs['color'] = colors
 
     if isinstance(alphas, list):
-        kwargs['alpha'] = alphas[idx]
+        if singleconf is True:
+            kwargs['alpha'] = alphas
+        else:
+            kwargs['alpha'] = alphas[idx]
     elif alphas is not None:
         kwargs['alpha'] = alphas
 
     if isinstance(edgecolors, list):
-        kwargs['edgecolor'] = edgecolors[idx]
+        if singleconf is True:
+            kwargs['edgecolor'] = edgecolors
+        else:
+            kwargs['edgecolor'] = edgecolors[idx]
     elif edgecolors is not None:
         kwargs['edgecolor'] = edgecolors
 
     if isinstance(markers, list):
-        kwargs['marker'] = markers[idx]
+        if singleconf is True:
+            kwargs['marker'] = markers
+        else:
+            kwargs['marker'] = markers[idx]
     elif markers is not None:
         kwargs['marker'] = markers
 

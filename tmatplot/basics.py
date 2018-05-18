@@ -82,10 +82,10 @@ def dualBar(data1, data2,
 @closeWithSave
 def multiBar(data, xlabel=None, ylabel=None,
              title=None, suptitle=None,
-             colors='C0', edgecolors='None',
+             colors='C0', alphas=None, edgecolors=None,
              savefile=None, close=True,
              grid=(1, None), figsize=(8, 2),
-             sharey=False, tight=True):
+             sharey=False, singleconf=False, tight=True):
     grid, axarr, _ = subplots(len(data), grid, figsize, sharey=sharey)
 
     if suptitle is not None:
@@ -93,7 +93,11 @@ def multiBar(data, xlabel=None, ylabel=None,
 
     for (i, d) in enumerate(data):
         ax = axarr[i // grid[1], i % grid[1]]
-        kwargs = makeKwargs(idx=i, colors=colors, edgecolors=edgecolors)
+        kwargs = makeKwargs(idx=i,
+                            colors=colors,
+                            alphas=alphas,
+                            edgecolors=edgecolors,
+                            singleconf=singleconf)
         ax.bar(range(len(d)), d, **kwargs)
 
         if isinstance(xlabel, list):
@@ -194,7 +198,7 @@ def hist(data, bins=None, labels=None,
                 for i in range(data.shape[1])]
         if colors is None:
             colors = get_colors(1)
-            if len(groups) < len(colors) // 2:
+            if len(groups) <= len(colors) // 2:
                 colors = colors[::2]
             colors = ['#%s' % c for c in colors]
 
