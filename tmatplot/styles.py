@@ -18,18 +18,21 @@ def large():
     size(300)
 
 
-def get_colors(c):
-    if c == 0:
+def get_colors(c, rgba=False):
+    color_list = [
         # adapted from the parula(8) function in MATLAB
-        return ['72a2dc', '0cadbb', '43bb97',
-                '8fbf73', 'd0c16a', 'febf3d',
-                'ffd200']
-    elif c == 1:
+        ['72a2dc', '0cadbb', '43bb97', '8fbf73', 'd0c16a',
+         'febf3d', 'ffd200'],
         # adapted from https://www.materialui.co/colors
-        return ['EF5350', 'EC407A', 'AB47BC', '7E57C2', '5C6BC0',
-                '42A5F5', '29B6F6', '26C6DA', '26A69A', '66BB6A',
-                '9CCC65', 'D4E157', 'FFEE58', 'FFCA28', 'FFA726',
-                'FF7043']
+        ['EF5350', 'EC407A', 'AB47BC', '7E57C2', '5C6BC0',
+         '42A5F5', '29B6F6', '26C6DA', '26A69A', '66BB6A',
+         '9CCC65', 'D4E157', 'FFEE58', 'FFCA28', 'FFA726',
+         'FF7043'],
+    ]
+    if rgba is True:
+        return ['#' + e for e in color_list[c]]
+    else:
+        return color_list[c]
 
 
 def colors(c=0):
