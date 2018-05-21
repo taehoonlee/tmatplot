@@ -15,7 +15,7 @@ def getRanges(data):
     return ranges
 
 
-def makeKwargs(idx=None, bins=None, density=None, labels=None,
+def makeKwargs(idx=None, bins=None, labels=None,
                colors=None, alphas=None, edgecolors=None, markers=None,
                singleconf=False):
     kwargs = {}
@@ -23,8 +23,6 @@ def makeKwargs(idx=None, bins=None, density=None, labels=None,
         kwargs['bins'] = bins[idx]
     elif bins is not None:
         kwargs['bins'] = bins
-    if density is not None:
-        kwargs['density'] = density
     if labels is not None:
         kwargs['label'] = labels[idx]
 
