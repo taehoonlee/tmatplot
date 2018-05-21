@@ -214,18 +214,20 @@ def hist(data, bins=None, labels=None,
                 _bins = bins[i] if groupby is not None else bins
                 kwargs = makeKwargs(idx=j,
                                     bins=_bins,
-                                    density=density,
                                     labels=labels,
                                     colors=colors,
                                     alphas=alphas,
                                     edgecolors=edgecolors)
+                if density is True:
+                    kwargs['weights'] = np.ones_like(d[j]) / d[j].shape[0]
                 ax.hist(d[j], **kwargs)
         else:
             kwargs = makeKwargs(bins=bins,
-                                density=density,
                                 colors=colors,
                                 alphas=alphas,
                                 edgecolors=edgecolors)
+            if density is True:
+                kwargs['weights'] = np.ones_like(d[j]) / d[j].shape[0]
             ax.hist(d[~np.isnan(d)], **kwargs)
 
         if xlabel is not None:
