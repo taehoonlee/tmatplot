@@ -126,7 +126,8 @@ def lotwave(data, title, suptitle=None,
     else:
         sampling = 1
 
-    step_id = meta[:, 3].astype(np.float32)
+    if meta is not None:
+        step_id = meta[:, 3].astype(np.float32)
     T, F = data.shape
 
     if overlay:
@@ -150,7 +151,7 @@ def lotwave(data, title, suptitle=None,
         _, axarr, _ = subplots(F, (None, 1), figsize=figsize, sharex=sharex)
         for i in range(F):
             ax = axarr[0, i]
-            if i < F - 1:
+            if i < data.shape[1]:
                 plotdata = data[:, i]
                 plottitle = title[i]
             else:
