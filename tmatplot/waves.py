@@ -113,7 +113,7 @@ def lotwave(data, title, suptitle=None,
             xlabel=None, ylabel=None,
             pointidx=None,
             fillidx=None, fillcolor='red',
-            savefile=None, figsize=(10, 1),
+            savefile=None, close=True, figsize=(10, 1),
             sharex=True, tight=True):
     if data.ndim == 1:
         data = np.expand_dims(data, -1)
