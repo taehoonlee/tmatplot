@@ -57,7 +57,7 @@ def wave(data, title,
 
     if ts is not None:
         ticks = [x.astype(int) for x in plt.gca().get_xticks()]
-        if ticks[-1] > T:
+        if ticks[-1] >= T:
             ticks = np.delete(ticks, -1)
         if tsfmt is not None:
             from datetime import datetime
@@ -78,12 +78,13 @@ def wave(data, title,
             plt.gca().set_ylim(ylim)
         else:
             for i in range(F):
-                ylim = ax[i].get_ylim()
-                ax[i].fill_between(range(T), ylim[0], ylim[1],
-                                   where=fillidx, edgecolor='None',
-                                   facecolor=fillcolor, alpha=0.2,
-                                   interpolate=False)
-                ax[i].set_ylim(ylim)
+                ax = axarr[0, i]
+                ylim = ax.get_ylim()
+                ax.fill_between(range(T), ylim[0], ylim[1],
+                                where=fillidx, edgecolor='None',
+                                facecolor=fillcolor, alpha=0.2,
+                                interpolate=False)
+                ax.set_ylim(ylim)
 
     if tight is True:
         plt.tight_layout()
