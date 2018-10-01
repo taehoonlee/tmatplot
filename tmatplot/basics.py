@@ -222,7 +222,8 @@ def hist(data, bins=None, labels=None,
                     kwargs['weights'] = np.ones_like(d[j]) / d[j].shape[0]
                 ax.hist(d[j], **kwargs)
         else:
-            kwargs = makeKwargs(bins=bins,
+            kwargs = makeKwargs(idx=i,
+                                bins=bins,
                                 colors=colors,
                                 alphas=alphas,
                                 edgecolors=edgecolors)
