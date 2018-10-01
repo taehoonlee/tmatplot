@@ -7,6 +7,6 @@ from .styles import *
 
 from .utils import remove_utils
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 
 remove_utils(__name__)
