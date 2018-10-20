@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from .utils import subplots
 from .utils import getRanges
+from .utils import makeKwargs
 from .utils import closeWithSave
 
 import numpy as np
@@ -9,9 +10,9 @@ import matplotlib.pyplot as plt
 
 
 @closeWithSave
-def wave(data, title,
+def wave(data, title=None,
          ts=None, tsfmt=None,
-         overlay=True,
+         colors=None, overlay=True,
          xlabel=None, ylabel=None,
          pointidx=None,
          fillidx=None, fillcolor='red',
@@ -39,8 +40,10 @@ def wave(data, title,
         _, axarr, _ = subplots(F, (None, 1), figsize=figsize, sharex=sharex)
         for i in range(F):
             ax = axarr[0, i]
-            ax.plot(data[:, i])
-            ax.set_title(title[i])
+            kwargs = makeKwargs(idx=i, colors=colors)
+            ax.plot(data[:, i], **kwargs)
+            if title is not None:
+                ax.set_title(title[i])
             if pointidx is not None:
                 for p in pointidx:
                     ax.plot(p, data[p, i], 'ro')
